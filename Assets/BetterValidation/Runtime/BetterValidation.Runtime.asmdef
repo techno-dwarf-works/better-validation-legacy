@@ -1,12 +1,8 @@
 {
-    "name": "{project_name}.Editor",
-    "rootNamespace": "",
-    "references": [
-        "GUID:443314a5a4e67c14a88ae223776b6554"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "name": "Better.Validation.Runtime",
+    "rootNamespace": "Better.Validation.Runtime",
+    "references": [],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
