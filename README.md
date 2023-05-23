@@ -5,4 +5,4 @@ To use this template follow those steps:
 3. Follow [CustomPackages](https://docs.unity3d.com/Manual/CustomPackages.html) instructions. 
 
 ## Install
-[How to istall](https://github.com/uurha/BetterPluginCollection/wiki/How-to-install)
+[How to install](https://github.com/uurha/BetterPluginCollection/wiki/How-to-install)
