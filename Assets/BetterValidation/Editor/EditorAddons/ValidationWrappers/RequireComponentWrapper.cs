@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Better.EditorTools.Helpers.Caching;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;

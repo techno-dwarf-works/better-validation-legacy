@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Better.EditorTools;
 using Better.EditorTools.Drawers.Base;
 using Better.EditorTools.Helpers.Caching;
-using Better.EditorTools.Utilities;
 using Better.Extensions.Runtime;
 using Better.Validation.EditorAddons.Utilities;
 using Better.Validation.EditorAddons.ValidationWrappers;
@@ -23,20 +21,22 @@ namespace Better.Validation.EditorAddons
 
         private static readonly LocalCache CacheField = new LocalCache();
         private static WrapperCollection<ValidationWrapper> _wrappers = new WrapperCollection<ValidationWrapper>();
-        private const string err = "Missing Ref in: <b>{2}</b>. Component: <i><b>{0}</b></i>, Property: <i><b>{1}</b></i>";
+        private const string Err = "Missing Ref in: <b>{2}</b>. Component: <i><b>{0}</b></i>, Property: <i><b>{1}</b></i>";
 
-        private const string validationErr =
+        private const string ValidationErr =
             "Validation failed with: <b>{3}</b>.\nPath: <i><b>{0}</b></i>. Component: <i><b>{1}</b></i>, Property: <i><b>{2}</b></i>";
 
-        private static void OnPropertyIteration(IContextResolver context, SerializedProperty sp, Component c)
+        private static void OnPropertyIteration(IContextResolver context, SerializedProperty sp, Component component)
         {
             var fieldInfo = sp.GetFieldInfoAndStaticTypeFromProperty();
             var list = sp.GetAttributes<ValidationAttribute>();
             if (fieldInfo == null || list == null) return;
+
+            var fieldType = fieldInfo.FieldInfo.GetArrayOrListElementType();
             foreach (var validationAttribute in list)
             {
-                _wrappers.ValidateCachedProperties(CacheField, sp, fieldInfo.FieldInfo.GetArrayOrListElementType(), validationAttribute.GetType(),
-                    ValidationUtility.Instance);
+                _wrappers.ValidateCachedProperties(CacheField, sp, fieldType, validationAttribute.GetType(), ValidationUtility.Instance);
+
                 if (!CacheField.IsValid)
                 {
                     if (CacheField.Value == null)
@@ -47,17 +47,25 @@ namespace Better.Validation.EditorAddons
                     CacheField.Value.Wrapper.SetProperty(sp, validationAttribute);
                 }
 
-                var validationWrapper = CacheField.Value?.Wrapper;
-                if (validationWrapper == null || !validationWrapper.IsSupported()) continue;
-                var result = validationWrapper.Validate();
-                if (!result.IsValid)
-                {
-                    var gameObject = c.gameObject;
-                    Debug.LogError(
-                        string.Format(validationErr, context.Resolve(gameObject), c.GetType().Name, sp.GetArrayPath(), result.Value),
-                        gameObject);
-                }
+                var result = ValidateCachedProperties(sp, validationAttribute);
+
+                if (result.IsValid) continue;
+                LogValidationError(context, sp, component, result);
             }
+        }
+
+        private static Cache<string> ValidateCachedProperties(SerializedProperty sp, ValidationAttribute validationAttribute)
+        {
+            var validationWrapper = CacheField.Value?.Wrapper;
+            if (validationWrapper == null || !validationWrapper.IsSupported()) return ValidationWrapper.GetClearCache();
+
+            return validationWrapper.Validate();
+        }
+
+        private static void LogValidationError(IContextResolver context, SerializedProperty sp, Component c, Cache<string> result)
+        {
+            var gameObject = c.gameObject;
+            Debug.LogError(string.Format(ValidationErr, context.Resolve(gameObject), c.GetType().Name, sp.GetArrayPath(), result.Value), gameObject);
         }
 
         public static void FindMissingReferencesInCurrentScene()
@@ -118,7 +126,7 @@ namespace Better.Validation.EditorAddons
             if (sp.objectReferenceValue == null && sp.objectReferenceInstanceIDValue != 0)
             {
                 var gameObject = c.gameObject;
-                Debug.LogError(string.Format(err, c.GetType().Name, ObjectNames.NicifyVariableName(sp.name), contextResolver.Resolve(gameObject)), gameObject);
+                Debug.LogError(string.Format(Err, c.GetType().Name, ObjectNames.NicifyVariableName(sp.name), contextResolver.Resolve(gameObject)), gameObject);
             }
         }
     }

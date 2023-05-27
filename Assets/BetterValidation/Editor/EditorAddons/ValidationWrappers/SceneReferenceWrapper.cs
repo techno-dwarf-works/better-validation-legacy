@@ -2,7 +2,6 @@
 using Better.EditorTools.Helpers.Caching;
 using Better.Extensions.Runtime;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Better.Validation.EditorAddons.ValidationWrappers

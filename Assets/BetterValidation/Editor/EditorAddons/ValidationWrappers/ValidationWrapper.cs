@@ -7,7 +7,7 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
 {
     public abstract class ValidationWrapper : UtilityWrapper
     {
-        protected static readonly Cache<string> CacheField = new Cache<string>();
+        internal static readonly Cache<string> CacheField = new Cache<string>();
         protected SerializedProperty _property;
         protected Attribute _attribute;
 
@@ -21,7 +21,7 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
             _attribute = attribute;
         }
 
-        protected static Cache<string> GetClearCache()
+        internal static Cache<string> GetClearCache()
         {
             CacheField.Set(true, string.Empty);
             return CacheField;
