@@ -11,39 +11,14 @@ namespace Better.Validation.Runtime.Attributes
     }
 
     [Conditional(EditorConditionString)]
-    public class FindAttribute : BaseFindAttribute
-    {
-        public FindAttribute(Type type) : base(type, RequireDirection.None)
-        {
-        }
-    }
-
-    [Conditional(EditorConditionString)]
-    public class FindInParentAttribute : BaseFindAttribute
-    {
-        public FindInParentAttribute(Type type) : base(type, RequireDirection.Parent)
-        {
-        }
-    }
-
-    [Conditional(EditorConditionString)]
-    public class FindInChildAttribute : BaseFindAttribute
-    {
-        public FindInChildAttribute(Type type) : base(type, RequireDirection.Child)
-        {
-        }
-    }
-
-    [Conditional(EditorConditionString)]
-    public abstract class BaseFindAttribute : ValidationAttribute
+    public class FindAttribute : ValidationAttribute
     {
         public Type RequiredType { get; }
-        public RequireDirection RequireDirection { get; }
+        public RequireDirection RequireDirection { get; set; } = RequireDirection.None;
         public bool ValidateIfFieldEmpty { get; set; } = true;
 
-        protected BaseFindAttribute(Type type, RequireDirection requireDirection)
+        public FindAttribute(Type type)
         {
-            RequireDirection = requireDirection;
             RequiredType = type;
         }
     }

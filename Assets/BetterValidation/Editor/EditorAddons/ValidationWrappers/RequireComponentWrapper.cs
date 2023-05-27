@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Better.EditorTools.Helpers.Caching;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
 using UnityEngine;
@@ -8,27 +9,34 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
 {
     public class RequireComponentWrapper : ValidationWrapper
     {
-        private BaseFindAttribute _attributeData;
+        private FindAttribute _attributeData;
 
         public override void SetProperty(SerializedProperty property, Attribute attribute)
         {
             base.SetProperty(property, attribute);
-            _attributeData = (BaseFindAttribute)attribute;
+            _attributeData = (FindAttribute)attribute;
         }
 
-        public override (bool, string) Validate()
+        public override bool IsSupported()
         {
-            if (_property.propertyType == SerializedPropertyType.ObjectReference)
+            return _property.propertyType == SerializedPropertyType.ObjectReference;
+        }
+
+        public override Cache<string> Validate()
+        {
+            var obj = _property.objectReferenceValue;
+            if (_attributeData.ValidateIfFieldEmpty)
             {
-                var obj = _property.objectReferenceValue;
-                if (_attributeData.ValidateIfFieldEmpty)
+                if (obj)
                 {
-                    if (obj) return (true, string.Empty);
+                    return GetClearCache();
                 }
-                
-                var propertySerializedObject = _property.serializedObject;
-                var targetObject = propertySerializedObject.targetObject;
-                var gameObject = ((Component)targetObject).gameObject;
+            }
+
+            var propertySerializedObject = _property.serializedObject;
+            var targetObject = propertySerializedObject.targetObject;
+            var gameObject = ((Component)targetObject)?.gameObject;
+            if (gameObject)
                 switch (_attributeData.RequireDirection)
                 {
                     case RequireDirection.Parent:
@@ -44,17 +52,16 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
                         throw new ArgumentOutOfRangeException();
                 }
 
-                if (!obj)
-                {
-                    return (false, $"Reference of {_attributeData.RequiredType} not found");
-                }
-
-                EditorUtility.SetDirty(targetObject);
-                propertySerializedObject.ApplyModifiedProperties();
-                _property.objectReferenceValue = obj;
+            if (!obj)
+            {
+                CacheField.Set(false, $"Reference of {_attributeData.RequiredType} not found");
+                return CacheField;
             }
 
-            return (true, string.Empty);
+            EditorUtility.SetDirty(targetObject);
+            _property.objectReferenceValue = obj;
+            propertySerializedObject.ApplyModifiedProperties();
+            return GetClearCache();
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Linq;
 using Better.EditorTools;
 using Better.EditorTools.Drawers.Base;
+using Better.EditorTools.Helpers.Caching;
+using Better.EditorTools.Utilities;
 using Better.Extensions.Runtime;
 using Better.Validation.EditorAddons.Utilities;
 using Better.Validation.EditorAddons.ValidationWrappers;
@@ -15,6 +17,11 @@ namespace Better.Validation.EditorAddons
 {
     public class ValidatorCommands
     {
+        protected class LocalCache : Cache<WrapperCollectionValue<ValidationWrapper>>
+        {
+        }
+
+        private static readonly LocalCache CacheField = new LocalCache();
         private static WrapperCollection<ValidationWrapper> _wrappers = new WrapperCollection<ValidationWrapper>();
         private const string err = "Missing Ref in: <b>{2}</b>. Component: <i><b>{0}</b></i>, Property: <i><b>{1}</b></i>";
 
@@ -28,38 +35,30 @@ namespace Better.Validation.EditorAddons
             if (fieldInfo == null || list == null) return;
             foreach (var validationAttribute in list)
             {
-                if (!ValidateCachedProperties(sp, fieldInfo.FieldInfo.GetArrayOrListElementType(), validationAttribute))
+                _wrappers.ValidateCachedProperties(CacheField, sp, fieldInfo.FieldInfo.GetArrayOrListElementType(), validationAttribute.GetType(),
+                    ValidationUtility.Instance);
+                if (!CacheField.IsValid)
                 {
-                    _wrappers[sp].Wrapper.SetProperty(sp, validationAttribute);
+                    if (CacheField.Value == null)
+                    {
+                        continue;
+                    }
+
+                    CacheField.Value.Wrapper.SetProperty(sp, validationAttribute);
                 }
 
-                var result = _wrappers[sp].Wrapper.Validate();
-                if (!result.Item1)
+                var validationWrapper = CacheField.Value?.Wrapper;
+                if (validationWrapper == null || !validationWrapper.IsSupported()) continue;
+                var result = validationWrapper.Validate();
+                if (!result.IsValid)
                 {
                     var gameObject = c.gameObject;
                     Debug.LogError(
-                        string.Format(validationErr, context.Resolve(gameObject), c.GetType().Name, ObjectNames.NicifyVariableName(sp.name), result.Item2),
+                        string.Format(validationErr, context.Resolve(gameObject), c.GetType().Name, sp.GetArrayPath(), result.Value),
                         gameObject);
                 }
             }
         }
-
-        private static bool ValidateCachedProperties(SerializedProperty property, Type fieldType, ValidationAttribute attribute)
-        {
-            var contains = _wrappers.ContainsKey(property);
-            if (contains)
-            {
-                ValidationUtility.Instance.ValidateCachedProperties(_wrappers);
-            }
-            else
-            {
-                var gizmoWrapper = ValidationUtility.Instance.GetUtilityWrapper<ValidationWrapper>(fieldType, attribute.GetType());
-                _wrappers.Add(property, new WrapperCollectionValue<ValidationWrapper>(gizmoWrapper, fieldType));
-            }
-
-            return contains;
-        }
-
 
         public static void FindMissingReferencesInCurrentScene()
         {

@@ -78,8 +78,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _testManaged:
     _gameObject:
-    - {fileID: 0}
-    - {fileID: 0}
-  _gameObject:
-  - {fileID: 4559051839212847903, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
-  - {fileID: 0}
+    - {fileID: 4559051839212847903}
+  _gameObject: []

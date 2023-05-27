@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -217,13 +217,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1001 &1446013533
+--- !u!1001 &547556269
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1250132227817140972, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: _testManaged._test
+      value: 
+      objectReference: {fileID: 547556270}
     - target: {fileID: 2891986434682577916, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -270,10 +274,52 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4559051839212847903, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
       propertyPath: m_Name
-      value: GameObject 1
+      value: GameObject 1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699746590488095776, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: _testManaged._test
+      value: 
+      objectReference: {fileID: 547556271}
+    - target: {fileID: 6699746590488095776, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: _gameObject.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699746590488095776, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: _gameObject.Array.data[0]
+      value: 
+      objectReference: {fileID: 4559051839212847903, guid: fdb29fda54e55054e9a854d5ff495337, type: 3}
+    - target: {fileID: 6699746590488095776, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: _testManaged._gameObject.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699746590488095776, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: _testManaged._gameObject.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+--- !u!114 &547556270 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1250132227817140972, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+  m_PrefabInstance: {fileID: 547556269}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe298e6f687355a40b598e2e0e8a41fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &547556271 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6699746590488095776, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+  m_PrefabInstance: {fileID: 547556269}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe298e6f687355a40b598e2e0e8a41fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2122059354
 GameObject:
   m_ObjectHideFlags: 0

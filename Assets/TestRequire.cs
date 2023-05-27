@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TestRequire : MonoBehaviour
 {
-    [FindInParent(typeof(Test))][SerializeField] private Test te;
+    [Find(typeof(Test))][SerializeField] private Test te;
     // Start is called before the first frame update
     void Start()
     {

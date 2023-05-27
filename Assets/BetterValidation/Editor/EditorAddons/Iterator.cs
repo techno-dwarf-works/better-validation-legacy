@@ -41,7 +41,6 @@ namespace Better.Validation.EditorAddons
 
         public delegate void OnPropertyIteration(IContextResolver context, SerializedProperty serializedProperty, Component component);
 
-        //TODO: Create context resolver
         public static void SetContext(IContextResolver context)
         {
             _context = context;

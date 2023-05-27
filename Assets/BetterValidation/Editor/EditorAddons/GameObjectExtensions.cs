@@ -1,30 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using System.Collections.Generic;
+using Better.Extensions.Runtime;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Better.Validation.EditorAddons
 {
     public static class GameObjectExtensions
     {
+        
+        private static readonly IReadOnlyList<GameObject> Empty = new List<GameObject>(); 
+
         public static string FullPath(this GameObject go)
         {
-            return go.transform.parent == null
+            return go.transform.parent.IsNullOrDestroyed()
                 ? go.name
                 : FullPath(go.transform.parent.gameObject) + "/" + go.name;
         }
 
         public static string FullPathNoRoot(this GameObject go)
         {
-            return go.transform.parent == null
+            return go.transform.parent.IsNullOrDestroyed()
                 ? string.Empty
                 : FullPathNoRoot(go.transform.parent.gameObject) + "/" + go.name;
         }
 
-        public static List<GameObject> GetAllChildren(this GameObject root)
+        public static IReadOnlyList<GameObject> GetAllChildren(this GameObject root)
         {
-            if (root == null) return new List<GameObject>();
+            if (root.IsNullOrDestroyed()) return Empty;
             var children = new List<GameObject>();
 
             var queue = new Queue<Transform>();

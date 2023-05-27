@@ -1,31 +1,33 @@
 ﻿using Better.EditorTools.Helpers;
+using Better.EditorTools.Helpers.Caching;
+using Better.Extensions.Runtime;
 using UnityEditor;
 
 namespace Better.Validation.EditorAddons.ValidationWrappers
 {
     public class NotNullWrapper : ValidationWrapper
     {
-        public override (bool, string) Validate()
+        public override bool IsSupported()
         {
-            if (_property.propertyType == SerializedPropertyType.ObjectReference && IsNullOrDestroyed(_property.objectReferenceValue))
+            return _property.propertyType == SerializedPropertyType.ObjectReference;
+        }
+
+        public override Cache<string> Validate()
+        {
+            if (_property.objectReferenceValue.IsNullOrDestroyed())
             {
                 var fieldName = DrawersHelper.FormatBoldItalic(_property.displayName);
                 if (_property.objectReferenceInstanceIDValue != 0)
                 {
-                    return (false, $"Object in \"{fieldName}\" field is missing reference");
+                    CacheField.Set(false, $"Object in \"{fieldName}\" field is missing reference");
+                    return CacheField;
                 }
 
-                return (false, $"Object in \"{fieldName}\" field is null");
+                CacheField.Set(false, $"Object in \"{fieldName}\" field is null");
+                return CacheField;
             }
-
-            return (true, string.Empty);
-        }
-
-        private bool IsNullOrDestroyed(UnityEngine.Object obj)
-        {
-            if (ReferenceEquals(obj, null)) return true;
-
-            return obj == null;
+            
+            return GetClearCache();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Better.Validation.EditorAddons.Utilities
                     }
                 },
                 {
-                    typeof(BaseFindAttribute), new Dictionary<Type, Type>(AssignableFromComparer.Instance)
+                    typeof(FindAttribute), new Dictionary<Type, Type>(AssignableFromComparer.Instance)
                     {
                         { typeof(UnityEngine.Object), typeof(RequireComponentWrapper) }
                     }

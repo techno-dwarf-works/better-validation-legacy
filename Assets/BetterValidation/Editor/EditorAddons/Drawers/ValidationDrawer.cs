@@ -15,22 +15,30 @@ namespace Better.Validation.EditorAddons.Drawers
 
         protected override bool PreDraw(ref Rect position, SerializedProperty property, GUIContent label)
         {
-            if (!ValidateCachedProperties(property, ValidationUtility.Instance))
+            var cache = ValidateCachedProperties(property, ValidationUtility.Instance);
+            var validationWrapper = cache.Value;
+            if (!cache.IsValid)
             {
-                _wrappers[property].Wrapper.SetProperty(property, attribute);
+                if (cache.Value == null)
+                {
+                    return false;
+                }
+
+                validationWrapper.Wrapper.SetProperty(property, attribute);
             }
 
-            var validationResult = _wrappers[property].Wrapper.Validate();
-            if (!validationResult.Item1)
+            if (!validationWrapper.Wrapper.IsSupported()) return true;
+            var validationResult = validationWrapper.Wrapper.Validate();
+            if (!validationResult.IsValid)
             {
-                _additional = DrawersHelper.GetHelpBoxHeight(position.width, validationResult.Item2, IconType.ErrorMessage) + DrawersHelper.SpaceHeight;
+                _additional = DrawersHelper.GetHelpBoxHeight(position.width, validationResult.Value, IconType.ErrorMessage) + DrawersHelper.SpaceHeight;
             }
 
-            if (!validationResult.Item1)
+            if (!validationResult.IsValid)
             {
                 var copy = position;
                 copy.y += EditorGUIUtility.singleLineHeight + DrawersHelper.SpaceHeight / 2f;
-                DrawersHelper.HelpBox(copy, validationResult.Item2, IconType.ErrorMessage);
+                DrawersHelper.HelpBox(copy, validationResult.Value, IconType.ErrorMessage);
             }
 
             return true;

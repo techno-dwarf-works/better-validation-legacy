@@ -1,4 +1,6 @@
 ﻿using Better.EditorTools.Helpers;
+using Better.EditorTools.Helpers.Caching;
+using Better.Extensions.Runtime;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -7,40 +9,22 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
 {
     public class SceneReferenceWrapper : NotNullWrapper
     {
-        public override (bool, string) Validate()
+        public override Cache<string> Validate()
         {
             var baseResult = base.Validate();
-            if (!baseResult.Item1)
+            if (!baseResult.IsValid)
             {
                 return baseResult;
             }
 
-            if (_property.propertyType == SerializedPropertyType.ObjectReference)
-            {
-                var target = _property.serializedObject.targetObject;
+            var target = _property.serializedObject.targetObject;
 
-                var obj = _property.objectReferenceValue;
+            var obj = _property.objectReferenceValue;
 
-                var targetType = PrefabUtility.GetPrefabAssetType(target);
-                var objType = PrefabUtility.GetPrefabAssetType(obj);
-                var currentPrefabStage = (bool)PrefabStageUtility.GetCurrentPrefabStage();
-                if (currentPrefabStage)
-                {
-                    if (targetType != PrefabAssetType.NotAPrefab || objType != PrefabAssetType.NotAPrefab)
-                    {
-                        return ValueTuple(obj, target);
-                    }
-                }
-                else
-                {
-                    return ValidateNotPrefabContext(obj, target);
-                }
-            }
-
-            return (true, string.Empty);
+            return ValidateNotPrefabContext(obj, target);
         }
 
-        private (bool, string) ValidateNotPrefabContext(Object obj, Object target)
+        private Cache<string> ValidateNotPrefabContext(Object obj, Object target)
         {
             var isObjectInScene = IsObjectInScene(obj);
             var isTargetInScene = IsObjectInScene(target);
@@ -48,7 +32,8 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
             if (isTargetInScene && !isObjectInScene)
             {
                 var str = DrawersHelper.FormatBoldItalic(_property.displayName);
-                return (false, $"Object in \"{str}\" field is not scene object");
+                CacheField.Set(false, $"Object in \"{str}\" field is not scene object");
+                return CacheField;
             }
 
             if (!isTargetInScene)
@@ -56,7 +41,7 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
                 return ValueTuple(obj, target);
             }
 
-            return (true, string.Empty);
+            return GetClearCache();
         }
 
         private bool IsObjectInScene(Object obj)
@@ -74,7 +59,7 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
             return false;
         }
 
-        private (bool, string) ValueTuple(Object obj, Object target)
+        private Cache<string> ValueTuple(Object obj, Object target)
         {
             var str = DrawersHelper.FormatBoldItalic(_property.displayName);
             var objRoot = GetOutermostPrefabInstanceRoot(obj);
@@ -82,16 +67,17 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
             var equals = objRoot == targetRoot;
             if (!equals)
             {
-                return (false, $"Object in \"{str}\" field is not part of {target.name} prefab");
+                CacheField.Set(false, $"Object in \"{str}\" field is not part of {target.name} prefab");
+                return CacheField;
             }
 
-            return (true, string.Empty);
+            return  GetClearCache();
         }
 
         private static Object GetOutermostPrefabInstanceRoot(Object obj)
         {
             var outermostPrefabInstanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(obj);
-            if (outermostPrefabInstanceRoot == null)
+            if (outermostPrefabInstanceRoot.IsNullOrDestroyed())
             {
                 if (obj is GameObject gameObject)
                     outermostPrefabInstanceRoot = gameObject.transform.root ? gameObject.transform.root.gameObject : gameObject;

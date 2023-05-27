@@ -47,8 +47,7 @@ MonoBehaviour:
   _testManaged:
     _gameObject:
     - {fileID: 1588328467231645692}
-  _gameObject:
-  - {fileID: 1588328467231645692}
+  _gameObject: []
 --- !u!1 &4559051839212847903
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +96,4 @@ MonoBehaviour:
   _testManaged:
     _gameObject:
     - {fileID: 1588328467231645692}
-    - {fileID: 0}
-  _gameObject:
-  - {fileID: 4559051839212847903}
-  - {fileID: 0}
+  _gameObject: []
