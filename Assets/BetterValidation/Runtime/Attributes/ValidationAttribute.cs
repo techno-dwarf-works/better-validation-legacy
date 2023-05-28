@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using Better.EditorTools.Runtime;
 using UnityEngine;
 
 namespace Better.Validation.Runtime.Attributes
 {
-    [Conditional(EditorConditionString)]
+    [Conditional(BetterEditorDefines.Editor)]
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
     public abstract class ValidationAttribute : PropertyAttribute
     {
-        public const string EditorConditionString = "UNITY_EDITOR";
     }
 }

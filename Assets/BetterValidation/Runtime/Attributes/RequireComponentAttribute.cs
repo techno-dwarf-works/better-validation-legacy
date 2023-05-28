@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Better.EditorTools.Runtime;
 
 namespace Better.Validation.Runtime.Attributes
 {
@@ -10,7 +11,7 @@ namespace Better.Validation.Runtime.Attributes
         Child
     }
 
-    [Conditional(EditorConditionString)]
+    [Conditional(BetterEditorDefines.Editor)]
     public class FindAttribute : ValidationAttribute
     {
         public Type RequiredType { get; }

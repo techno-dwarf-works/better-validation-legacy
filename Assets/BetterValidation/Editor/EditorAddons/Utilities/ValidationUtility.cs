@@ -37,6 +37,12 @@ namespace Better.Validation.EditorAddons.Utilities
                     {
                         { typeof(UnityEngine.Object), typeof(RequireComponentWrapper) }
                     }
+                },
+                {
+                    typeof(DataValidationAttribute), new Dictionary<Type, Type>(AnyTypeComparer.Instance)
+                    {
+                        { typeof(Type), typeof(DataValidationWrapper) }
+                    }
                 }
             };
         }
@@ -45,7 +51,8 @@ namespace Better.Validation.EditorAddons.Utilities
         {
             return new HashSet<Type>(AssignableFromComparer.Instance)
             {
-                typeof(UnityEngine.Object),
+                typeof(UnityEngine.Object), 
+                typeof(System.Object)
             };
         }
     }

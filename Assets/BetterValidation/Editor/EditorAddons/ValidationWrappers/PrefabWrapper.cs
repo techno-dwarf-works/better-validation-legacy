@@ -17,15 +17,13 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
             var obj = _property.objectReferenceValue;
             if (!PrefabUtility.IsPartOfPrefabAsset(obj))
             {
-                var str = DrawersHelper.FormatBoldItalic(_property.displayName);
+                var str = DrawersHelper.BeautifyFormat(_property.displayName);
                 if (!PrefabUtility.IsPartOfNonAssetPrefabInstance(obj))
                 {
-                    CacheField.Set(false, $"Object in \"{str}\" field is not prefab");
-                    return CacheField;
+                    return GetNotValidCache($"Object in {str} field is not prefab");
                 }
 
-                CacheField.Set(false, $"Object in \"{str}\" field is prefab instance in scene");
-                return CacheField;
+                return GetNotValidCache($"Object in {str} field is prefab instance in scene");
             }
 
             return GetClearCache();

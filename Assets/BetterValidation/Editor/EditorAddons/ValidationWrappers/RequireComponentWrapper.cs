@@ -1,4 +1,5 @@
 ﻿using System;
+using Better.EditorTools.Helpers;
 using Better.EditorTools.Helpers.Caching;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
@@ -10,15 +11,10 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
     {
         private FindAttribute _attributeData;
 
-        public override void SetProperty(SerializedProperty property, Attribute attribute)
+        public override void SetProperty(SerializedProperty property, ValidationAttribute attribute)
         {
             base.SetProperty(property, attribute);
             _attributeData = (FindAttribute)attribute;
-        }
-
-        public override bool IsSupported()
-        {
-            return _property.propertyType == SerializedPropertyType.ObjectReference;
         }
 
         public override Cache<string> Validate()
@@ -53,8 +49,7 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
 
             if (!obj)
             {
-                CacheField.Set(false, $"Reference of {_attributeData.RequiredType} not found");
-                return CacheField;
+                return GetNotValidCache($"Reference of {DrawersHelper.BeautifyFormat(_attributeData.RequiredType.Name)} not found");
             }
 
             EditorUtility.SetDirty(targetObject);

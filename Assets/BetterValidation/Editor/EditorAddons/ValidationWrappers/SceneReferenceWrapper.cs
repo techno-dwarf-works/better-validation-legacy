@@ -30,9 +30,8 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
 
             if (isTargetInScene && !isObjectInScene)
             {
-                var str = DrawersHelper.FormatBoldItalic(_property.displayName);
-                CacheField.Set(false, $"Object in \"{str}\" field is not scene object");
-                return CacheField;
+                var str = DrawersHelper.BeautifyFormat(_property.displayName);
+                return GetNotValidCache($"Object in {str} field is not scene object");
             }
 
             if (!isTargetInScene)
@@ -60,17 +59,16 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
 
         private Cache<string> ValueTuple(Object obj, Object target)
         {
-            var str = DrawersHelper.FormatBoldItalic(_property.displayName);
             var objRoot = GetOutermostPrefabInstanceRoot(obj);
             var targetRoot = GetOutermostPrefabInstanceRoot(target);
             var equals = objRoot == targetRoot;
             if (!equals)
             {
-                CacheField.Set(false, $"Object in \"{str}\" field is not part of {target.name} prefab");
-                return CacheField;
+                return GetNotValidCache(
+                    $"Object in {DrawersHelper.BeautifyFormat(_property.displayName)} field is not part of {DrawersHelper.BeautifyFormat(target.name)} prefab");
             }
 
-            return  GetClearCache();
+            return GetClearCache();
         }
 
         private static Object GetOutermostPrefabInstanceRoot(Object obj)

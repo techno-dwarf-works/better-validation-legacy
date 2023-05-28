@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons
+namespace Better.Validation.EditorAddons.Utilities
 {
     public interface IContextResolver
     {

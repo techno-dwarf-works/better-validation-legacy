@@ -23,9 +23,6 @@ namespace Better.Validation.EditorAddons
         private static WrapperCollection<ValidationWrapper> _wrappers = new WrapperCollection<ValidationWrapper>();
         private const string Err = "Missing Ref in: <b>{2}</b>. Component: <i><b>{0}</b></i>, Property: <i><b>{1}</b></i>";
 
-        private const string ValidationErr =
-            "Validation failed with: <b>{3}</b>.\nPath: <i><b>{0}</b></i>. Component: <i><b>{1}</b></i>, Property: <i><b>{2}</b></i>";
-
         private static void OnPropertyIteration(IContextResolver context, SerializedProperty sp, Component component)
         {
             var fieldInfo = sp.GetFieldInfoAndStaticTypeFromProperty();
@@ -57,7 +54,7 @@ namespace Better.Validation.EditorAddons
         private static Cache<string> ValidateCachedProperties(SerializedProperty sp, ValidationAttribute validationAttribute)
         {
             var validationWrapper = CacheField.Value?.Wrapper;
-            if (validationWrapper == null || !validationWrapper.IsSupported()) return ValidationWrapper.GetClearCache();
+            if (validationWrapper == null) return ValidationWrapper.GetClearCache();
 
             return validationWrapper.Validate();
         }
@@ -65,7 +62,9 @@ namespace Better.Validation.EditorAddons
         private static void LogValidationError(IContextResolver context, SerializedProperty sp, Component c, Cache<string> result)
         {
             var gameObject = c.gameObject;
-            Debug.LogError(string.Format(ValidationErr, context.Resolve(gameObject), c.GetType().Name, sp.GetArrayPath(), result.Value), gameObject);
+            var str =
+                $"Validation failed with: <b>{result.Value}</b>.\nPath: <i><b>{context.Resolve(gameObject)}</b></i>. Component: <i><b>{c.GetType().Name}</b></i>, Property: <i><b>{sp.GetArrayPath()}</b></i>";
+            Debug.LogError(str, gameObject);
         }
 
         public static void FindMissingReferencesInCurrentScene()

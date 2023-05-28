@@ -1,5 +1,6 @@
 using Better.EditorTools.Drawers.Base;
 using Better.EditorTools.Helpers;
+using Better.EditorTools.Helpers.Caching;
 using Better.Validation.EditorAddons.Utilities;
 using Better.Validation.EditorAddons.ValidationWrappers;
 using Better.Validation.Runtime.Attributes;
@@ -11,7 +12,7 @@ namespace Better.Validation.EditorAddons.Drawers
     [CustomPropertyDrawer(typeof(ValidationAttribute), true)]
     public class ValidationDrawer : MultiFieldDrawer<ValidationWrapper>
     {
-        private float _additional;
+        private Cache<string> _validationResult;
 
         protected override bool PreDraw(ref Rect position, SerializedProperty property, GUIContent label)
         {
@@ -24,22 +25,10 @@ namespace Better.Validation.EditorAddons.Drawers
                     return false;
                 }
 
-                validationWrapper.Wrapper.SetProperty(property, attribute);
+                validationWrapper.Wrapper.SetProperty(property, (ValidationAttribute)attribute);
             }
 
-            if (!validationWrapper.Wrapper.IsSupported()) return true;
-            var validationResult = validationWrapper.Wrapper.Validate();
-            if (!validationResult.IsValid)
-            {
-                _additional = DrawersHelper.GetHelpBoxHeight(position.width, validationResult.Value, IconType.ErrorMessage) + DrawersHelper.SpaceHeight;
-            }
-
-            if (!validationResult.IsValid)
-            {
-                var copy = position;
-                copy.y += EditorGUIUtility.singleLineHeight + DrawersHelper.SpaceHeight / 2f;
-                DrawersHelper.HelpBox(copy, validationResult.Value, IconType.ErrorMessage);
-            }
+            _validationResult = validationWrapper.Wrapper.Validate().Copy();
 
             return true;
         }
@@ -51,11 +40,15 @@ namespace Better.Validation.EditorAddons.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUI.GetPropertyHeight(property, label) + _additional;
+            return EditorGUI.GetPropertyHeight(property, label);
         }
 
         protected override void PostDraw(Rect position, SerializedProperty property, GUIContent label)
         {
+            if (!_validationResult.IsValid)
+            {
+                DrawersHelper.HelpBox(_validationResult.Value, IconType.ErrorMessage);
+            }
         }
 
         protected override WrapperCollection<ValidationWrapper> GenerateCollection()

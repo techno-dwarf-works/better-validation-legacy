@@ -2,7 +2,7 @@
 using Better.Extensions.Runtime;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons
+namespace Better.Validation.EditorAddons.Utilities
 {
     public static class GameObjectExtensions
     {
