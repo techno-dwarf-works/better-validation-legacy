@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Better.Validation.Runtime.Attributes
 {
     [Conditional(BetterEditorDefines.Editor)]
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public abstract class ValidationAttribute : PropertyAttribute
     {
     }

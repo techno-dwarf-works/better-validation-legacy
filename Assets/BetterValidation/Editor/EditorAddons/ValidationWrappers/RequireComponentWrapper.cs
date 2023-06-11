@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Better.Validation.EditorAddons.ValidationWrappers
 {
-    public class RequireComponentWrapper : ValidationWrapper
+    public class RequireComponentWrapper : PropertyValidationWrapper
     {
         private FindAttribute _attributeData;
 
@@ -19,7 +19,7 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
 
         public override Cache<string> Validate()
         {
-            var obj = _property.objectReferenceValue;
+            var obj = Property.objectReferenceValue;
             if (_attributeData.ValidateIfFieldEmpty)
             {
                 if (obj)
@@ -28,7 +28,7 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
                 }
             }
 
-            var propertySerializedObject = _property.serializedObject;
+            var propertySerializedObject = Property.serializedObject;
             var targetObject = propertySerializedObject.targetObject;
             var gameObject = ((Component)targetObject)?.gameObject;
             if (gameObject)
@@ -53,9 +53,14 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
             }
 
             EditorUtility.SetDirty(targetObject);
-            _property.objectReferenceValue = obj;
+            Property.objectReferenceValue = obj;
             propertySerializedObject.ApplyModifiedProperties();
             return GetClearCache();
+        }
+
+        public override bool IsSupported()
+        {
+            return Property.propertyType == SerializedPropertyType.ObjectReference;
         }
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Better.Validation.EditorAddons.Drawers
 {
     [CustomPropertyDrawer(typeof(ValidationAttribute), true)]
-    public class ValidationDrawer : MultiFieldDrawer<ValidationWrapper>
+    public class ValidationDrawer : MultiFieldDrawer<PropertyValidationWrapper>
     {
         private Cache<string> _validationResult;
 
@@ -28,8 +28,10 @@ namespace Better.Validation.EditorAddons.Drawers
                 validationWrapper.Wrapper.SetProperty(property, (ValidationAttribute)attribute);
             }
 
-            _validationResult = validationWrapper.Wrapper.Validate().Copy();
-
+            if (validationWrapper.Wrapper.IsSupported())
+            {
+                _validationResult = validationWrapper.Wrapper.Validate().Copy();
+            }
             return true;
         }
 
@@ -51,9 +53,9 @@ namespace Better.Validation.EditorAddons.Drawers
             }
         }
 
-        protected override WrapperCollection<ValidationWrapper> GenerateCollection()
+        protected override WrapperCollection<PropertyValidationWrapper> GenerateCollection()
         {
-            return new WrapperCollection<ValidationWrapper>();
+            return new WrapperCollection<PropertyValidationWrapper>();
         }
     }
 }

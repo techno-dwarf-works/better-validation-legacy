@@ -1,5 +1,5 @@
 {
-    "name": "Better.Validation.Runtime",
+    "name": "Better",
     "rootNamespace": "Better.Validation.Runtime",
     "references": [
         "GUID:a59e3daedde9ca94bba45364d4ead25f"

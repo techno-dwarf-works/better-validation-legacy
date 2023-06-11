@@ -4,34 +4,41 @@ namespace Better.Validation.EditorAddons
 {
     public static class MenuItems
     {
-        [MenuItem(BetterInternalTools.MenuItemPrefix + "/Show Missing Object References in scene", false, 50)]
-        private static void FindMissingReferencesInCurrentScene()
+        private static readonly ValidatorCommands Commands;
+
+        static MenuItems()
         {
-            ValidatorCommands.FindMissingReferencesInCurrentScene();
+            Commands = new ValidatorCommands();
+        }
+
+        [MenuItem(BetterInternalTools.MenuItemPrefix + "/Show Missing Object References in scene", false, 50)]
+        private static async void FindMissingReferencesInCurrentScene()
+        {
+            ValidationWindow.OpenWindow(await Commands.FindMissingReferencesInCurrentScene());
         }
 
         [MenuItem(BetterInternalTools.MenuItemPrefix + "/Validate in Project", false, 50)]
-        private static void ValidateInProject()
+        private static async void ValidateInProject()
         {
-            ValidatorCommands.ValidateAttributesInProject();
+            ValidationWindow.OpenWindow(await Commands.ValidateAttributesInProject());
         }
 
         [MenuItem(BetterInternalTools.MenuItemPrefix + "/Validate in Current scene", false, 50)]
-        private static void ValidateInCurrentScene()
+        private static async void ValidateInCurrentScene()
         {
-            ValidatorCommands.ValidateAttributesInCurrentScene();
+            ValidationWindow.OpenWindow(await Commands.ValidateAttributesInCurrentScene());
         }
 
         [MenuItem(BetterInternalTools.MenuItemPrefix + "/Show Missing Object References in assets", false, 52)]
-        private static void MissingSpritesInAssets()
+        private static async void MissingSpritesInAssets()
         {
-            ValidatorCommands.MissingReferencesInAssets();
+            ValidationWindow.OpenWindow(await Commands.MissingReferencesInProject());
         }
 
         [MenuItem(BetterInternalTools.MenuItemPrefix + "/Show Missing Object References in all scenes", false, 51)]
-        private static void MissingInAllScenes()
+        private static async void MissingInAllScenes()
         {
-            ValidatorCommands.MissingInAllScenes();
+            ValidationWindow.OpenWindow(await Commands.MissingInAllScenes());
         }
     }
 }

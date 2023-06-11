@@ -1,68 +1,52 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Better.Validation.EditorAddons.ContextResolver;
+using Better.Validation.EditorAddons.ValidationWrappers;
 using UnityEditor;
 using UnityEngine;
 
 namespace Better.Validation.EditorAddons.Utilities
 {
-    public interface IContextResolver
-    {
-        public string Resolve(GameObject gameObject);
-    }
-
-    public class SceneResolver : IContextResolver
-    {
-        public static IContextResolver Instance { get; } = new SceneResolver();
-
-        public string Resolve(GameObject gameObject)
-        {
-            if (gameObject.scene.IsValid())
-                return $"{gameObject.scene.path}/{gameObject.FullPath()}";
-            return gameObject.FullPath();
-        }
-    }
-
-    public class AssetResolver : IContextResolver
-    {
-        public static IContextResolver Instance { get; } = new AssetResolver();
-
-        public string Resolve(GameObject gameObject)
-        {
-            var hasParent = gameObject.transform.parent != null;
-            if (!gameObject.scene.IsValid())
-                return AssetDatabase.GetAssetPath(gameObject) + (hasParent ? gameObject.FullPathNoRoot() : string.Empty);
-            return gameObject.FullPath();
-        }
-    }
-
     public static class Iterator
     {
         private static IContextResolver _context;
+        private static readonly IterationData CacheData = new IterationData();
 
-        public delegate void OnPropertyIteration(IContextResolver context, SerializedProperty serializedProperty, Component component);
+        public delegate IEnumerable<ValidationCommandData> OnPropertyIteration(IterationData commandData);
 
         public static void SetContext(IContextResolver context)
         {
             _context = context;
+            CacheData.SetResolver(context);
         }
 
-        public static void ObjectIteration(GameObject go, OnPropertyIteration onPropertyIteration)
+        public static List<ValidationCommandData> ObjectIteration(Object go, OnPropertyIteration onPropertyIteration)
         {
-            var components = go.GetComponents<Component>();
+            var gameObject = go as GameObject;
+            var components = gameObject ? gameObject.GetComponents<Component>() : new[] { go };
 
+            var commandData = new List<ValidationCommandData>();
             EditorUtility.DisplayProgressBar("Validating components...", "", 0);
             for (var index = 0; index < components.Length; index++)
             {
-                var c = components[index];
-                if (!c)
+                var obj = components[index];
+                if (!obj)
                 {
-                    Debug.LogError("Missing Component in GO: " + _context.Resolve(go), go);
+                    CacheData.SetTarget(go);
+                    var missingReference = new ValidationCommandData(CacheData, new MissingComponentWrapper(gameObject));
+                    missingReference.SetResultCompiler((data, result) => $"Missing Component on GameObject: {_context.Resolve(data.Target)}");
+                    missingReference.Revalidate();
                     continue;
                 }
 
-                EditorUtility.DisplayProgressBar("Validating components...", $"Validating {c.name}...", Mathf.Clamp01(index / (float)components.Length));
+                CacheData.SetTarget(obj);
+                EditorUtility.DisplayProgressBar("Validating components...", $"Validating {obj.name}...",
+                    Mathf.Clamp01(index / (float)components.Length));
 
-                var so = new SerializedObject(c);
+                var so = new SerializedObject(obj);
+                CacheData.SetContext(so);
+                so.forceChildVisibility = true;
+                so.Update();
                 var sp = so.GetIterator();
 
                 var copy = sp.Copy();
@@ -74,27 +58,34 @@ namespace Better.Validation.EditorAddons.Utilities
                         var remainingCopy = sp.Copy();
                         EditorUtility.DisplayProgressBar("Validating property...", $"Validating {sp.propertyPath}...",
                             remainingCopy.CountRemaining() / (float)count);
-                        onPropertyIteration?.Invoke(_context, sp, c);
+                        CacheData.SetProperty(sp.Copy());
+                        var list = onPropertyIteration?.Invoke(CacheData);
+                        if (list != null) commandData.AddRange(list);
                     }
                 }
             }
 
             EditorUtility.ClearProgressBar();
+            return commandData;
         }
 
 
-        public static async Task IterateRoots(IReadOnlyList<GameObject> objs, OnPropertyIteration onPropertyIteration)
+        public static async Task<List<ValidationCommandData>> ObjectsIteration(IReadOnlyList<Object> objs, OnPropertyIteration onPropertyIteration)
         {
+            var list = new List<ValidationCommandData>();
             EditorUtility.DisplayProgressBar("Validating objects...", "", 0);
             for (var index = 0; index < objs.Count; index++)
             {
                 var go = objs[index];
                 EditorUtility.DisplayProgressBar("Validating objects...", $"Validating {go.FullPath()}...", index / (float)objs.Count);
                 await Task.Yield();
-                ObjectIteration(go, onPropertyIteration);
+                list.AddRange(ObjectIteration(go, onPropertyIteration));
             }
 
             EditorUtility.ClearProgressBar();
+            return list;
         }
+        
+        
     }
 }

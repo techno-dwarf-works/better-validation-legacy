@@ -16,9 +16,9 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
                 return baseResult;
             }
 
-            var target = _property.serializedObject.targetObject;
+            var target = Property.serializedObject.targetObject;
 
-            var obj = _property.objectReferenceValue;
+            var obj = Property.objectReferenceValue;
 
             return ValidateNotPrefabContext(obj, target);
         }
@@ -30,7 +30,7 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
 
             if (isTargetInScene && !isObjectInScene)
             {
-                var str = DrawersHelper.BeautifyFormat(_property.displayName);
+                var str = DrawersHelper.BeautifyFormat(Property.displayName);
                 return GetNotValidCache($"Object in {str} field is not scene object");
             }
 
@@ -65,7 +65,7 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
             if (!equals)
             {
                 return GetNotValidCache(
-                    $"Object in {DrawersHelper.BeautifyFormat(_property.displayName)} field is not part of {DrawersHelper.BeautifyFormat(target.name)} prefab");
+                    $"Object in {DrawersHelper.BeautifyFormat(Property.displayName)} field is not part of {DrawersHelper.BeautifyFormat(target.name)} prefab");
             }
 
             return GetClearCache();

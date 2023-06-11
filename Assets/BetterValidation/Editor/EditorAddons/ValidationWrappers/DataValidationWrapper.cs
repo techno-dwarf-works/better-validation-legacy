@@ -8,14 +8,14 @@ using Better.Validation.Runtime.Attributes;
 
 namespace Better.Validation.EditorAddons.ValidationWrappers
 {
-    public class DataValidationWrapper : ValidationWrapper
+    public class DataValidationWrapper : PropertyValidationWrapper
     {
         public override Cache<string> Validate()
         {
-            var fieldCache = _property.GetFieldInfoAndStaticTypeFromProperty();
-            var att = (DataValidationAttribute)_attribute;
+            var fieldCache = Property.GetFieldInfoAndStaticTypeFromProperty();
+            var att = (DataValidationAttribute)Attribute;
 
-            var propertyContainer = _property.GetPropertyContainer();
+            var propertyContainer = Property.GetPropertyContainer();
             var method = propertyContainer.GetType().GetMethod(att.MethodName, BetterEditorDefines.MethodFlags);
             var methodName = DrawersHelper.BeautifyFormat(att.MethodName);
             if (method == null)
@@ -46,24 +46,25 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
 
         private Cache<string> InvokeMethod(MethodInfo method, FieldInfoCache fieldCache, object propertyContainer)
         {
-            var value = _property.GetValue();
+            var value = Property.GetValue();
+            var parameters = new object[] { value };
             if (method.ReturnType == typeof(void))
             {
-                method.Invoke(propertyContainer, new object[] { value });
+                method.Invoke(propertyContainer, parameters);
             }
             else if (method.ReturnType == typeof(bool))
             {
-                var result = (bool)method.Invoke(propertyContainer, new object[] { value });
+                var result = (bool)method.Invoke(propertyContainer, parameters);
                 if (!result)
                 {
-                    var name = fieldCache.FieldInfo.IsArrayOrList() ? _property.GetArrayPath() : propertyContainer.GetType().Name;
+                    var name = fieldCache.FieldInfo.IsArrayOrList() ? Property.GetArrayPath() : propertyContainer.GetType().Name;
                     return GetNotValidCache(
                         $"Validation failed of {DrawersHelper.BeautifyFormat(fieldCache.FieldInfo.Name)} in {DrawersHelper.BeautifyFormat(name)}");
                 }
             }
             else if (method.ReturnType == typeof(string))
             {
-                var result = (string)method.Invoke(propertyContainer, new object[] { value });
+                var result = (string)method.Invoke(propertyContainer, parameters);
                 if (!string.IsNullOrEmpty(result))
                 {
                     return GetNotValidCache(result);
@@ -71,6 +72,11 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
             }
 
             return GetClearCache();
+        }
+
+        public override bool IsSupported()
+        {
+            return true;
         }
     }
 }

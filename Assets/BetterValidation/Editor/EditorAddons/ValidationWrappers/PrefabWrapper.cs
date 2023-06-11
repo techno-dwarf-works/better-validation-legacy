@@ -14,10 +14,10 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
                 return baseResult;
             }
 
-            var obj = _property.objectReferenceValue;
+            var obj = Property.objectReferenceValue;
             if (!PrefabUtility.IsPartOfPrefabAsset(obj))
             {
-                var str = DrawersHelper.BeautifyFormat(_property.displayName);
+                var str = DrawersHelper.BeautifyFormat(Property.displayName);
                 if (!PrefabUtility.IsPartOfNonAssetPrefabInstance(obj))
                 {
                     return GetNotValidCache($"Object in {str} field is not prefab");

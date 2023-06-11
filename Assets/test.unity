@@ -226,12 +226,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1250132227817140972, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
       propertyPath: intValue
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1250132227817140972, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
       propertyPath: _testManaged._test
       value: 
       objectReference: {fileID: 547556270}
+    - target: {fileID: 1250132227817140972, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: _gameObject.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1250132227817140972, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: _gameObject.Array.data[0]
+      value: 
+      objectReference: {fileID: 377999213}
     - target: {fileID: 1250132227817140972, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
       propertyPath: _testManaged._gameObject.Array.size
       value: 3
@@ -244,6 +252,14 @@ PrefabInstance:
       propertyPath: _testManaged._gameObject.Array.data[2]
       value: 
       objectReference: {fileID: 547556272}
+    - target: {fileID: 1938846075256916255, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: intValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2723441660245099221, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: intValue
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2891986434682577916, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -292,10 +308,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameObject 1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5946359542780982597, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: intValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214553315797155923, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: intValue
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6699746590488095776, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
       propertyPath: _testManaged._test
       value: 
-      objectReference: {fileID: 547556271}
+      objectReference: {fileID: 0}
     - target: {fileID: 6699746590488095776, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
       propertyPath: _gameObject.Array.size
       value: 0
@@ -312,6 +336,10 @@ PrefabInstance:
       propertyPath: _testManaged._gameObject.Array.data[0]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6791039733833939981, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
+      propertyPath: intValue
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
 --- !u!114 &547556270 stripped
@@ -320,17 +348,6 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 547556269}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe298e6f687355a40b598e2e0e8a41fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &547556271 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6699746590488095776, guid: 70c02e1d6e0bcc849bb7722a25ead6bd, type: 3}
-  m_PrefabInstance: {fileID: 547556269}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 547556272}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe298e6f687355a40b598e2e0e8a41fe, type: 3}
@@ -353,7 +370,7 @@ GameObject:
   - component: {fileID: 2122059356}
   - component: {fileID: 2122059355}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: 1
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
