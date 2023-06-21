@@ -36,6 +36,7 @@ namespace Better.Validation.EditorAddons.Utilities
                     var missingReference = new ValidationCommandData(CacheData, new MissingComponentWrapper(gameObject));
                     missingReference.SetResultCompiler((data, result) => $"Missing Component on GameObject: {_context.Resolve(data.Target)}");
                     missingReference.Revalidate();
+                    commandData.Add(missingReference);
                     continue;
                 }
 

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Better.EditorTools;
-using Better.EditorTools.Drawers.Base;
-using Better.EditorTools.Helpers.Caching;
-using Better.Extensions.Runtime;
 using Better.Validation.EditorAddons.ContextResolver;
 using Better.Validation.EditorAddons.Utilities;
-using Better.Validation.EditorAddons.ValidationWrappers;
-using Better.Validation.Runtime.Attributes;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -41,7 +34,7 @@ namespace Better.Validation.EditorAddons
 
         public async Task<List<ValidationCommandData>> MissingInAllScenes()
         {
-            Iterator.SetContext(AssetResolver.Instance);
+            Iterator.SetContext(SceneResolver.Instance);
             var list = new List<ValidationCommandData>();
             foreach (var scene in EditorBuildSettings.scenes.Where(s => s.enabled))
             {
@@ -57,7 +50,7 @@ namespace Better.Validation.EditorAddons
         {
             var countLoaded = SceneManager.sceneCount;
 
-            Iterator.SetContext(AssetResolver.Instance);
+            Iterator.SetContext(SceneResolver.Instance);
             var list = new List<ValidationCommandData>();
             for (var i = 0; i < countLoaded; i++)
             {

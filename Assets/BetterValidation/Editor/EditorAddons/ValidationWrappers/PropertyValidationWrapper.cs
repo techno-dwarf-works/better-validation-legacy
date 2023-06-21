@@ -8,6 +8,8 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
         protected internal SerializedProperty Property { get; private set; }
         protected internal ValidationAttribute Attribute { get; private set; }
 
+        public override ValidationType Type => Attribute.Type;
+
         public virtual void SetProperty(SerializedProperty property, ValidationAttribute attribute)
         {
             Property = property;

@@ -1,11 +1,14 @@
 using Better.EditorTools.Helpers.Caching;
 using Better.EditorTools.Utilities;
+using Better.Validation.Runtime.Attributes;
 
 namespace Better.Validation.EditorAddons.ValidationWrappers
 {
     public abstract class ValidationWrapper : UtilityWrapper
     {
         internal static readonly Cache<string> CacheField = new Cache<string>();
+
+        public abstract ValidationType Type { get; }
 
         public abstract Cache<string> Validate();
 

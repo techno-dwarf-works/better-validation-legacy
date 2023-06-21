@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Better.EditorTools.Runtime;
+using Better.Tools.Runtime;
 
 namespace Better.Validation.Runtime.Attributes
 {

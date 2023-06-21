@@ -1,3 +1,4 @@
+using System;
 using Better.EditorTools.Drawers.Base;
 using Better.EditorTools.Helpers;
 using Better.EditorTools.Helpers.Caching;
@@ -12,12 +13,13 @@ namespace Better.Validation.EditorAddons.Drawers
     [CustomPropertyDrawer(typeof(ValidationAttribute), true)]
     public class ValidationDrawer : MultiFieldDrawer<PropertyValidationWrapper>
     {
-        private Cache<string> _validationResult;
+        private Cache<BetterTuple<string, ValidationType>> _validationResult = new Cache<BetterTuple<string, ValidationType>>();
 
         protected override bool PreDraw(ref Rect position, SerializedProperty property, GUIContent label)
         {
             var cache = ValidateCachedProperties(property, ValidationUtility.Instance);
             var validationWrapper = cache.Value;
+            var wrapper = validationWrapper.Wrapper;
             if (!cache.IsValid)
             {
                 if (cache.Value == null)
@@ -25,13 +27,15 @@ namespace Better.Validation.EditorAddons.Drawers
                     return false;
                 }
 
-                validationWrapper.Wrapper.SetProperty(property, (ValidationAttribute)attribute);
+                wrapper.SetProperty(property, (ValidationAttribute)attribute);
             }
 
-            if (validationWrapper.Wrapper.IsSupported())
+            if (wrapper.IsSupported())
             {
-                _validationResult = validationWrapper.Wrapper.Validate().Copy();
+                var validation = wrapper.Validate();
+                _validationResult.Set(validation.IsValid, new BetterTuple<string, ValidationType>(validation.Value, wrapper.Type));
             }
+
             return true;
         }
 
@@ -49,7 +53,8 @@ namespace Better.Validation.EditorAddons.Drawers
         {
             if (!_validationResult.IsValid)
             {
-                DrawersHelper.HelpBox(_validationResult.Value, IconType.ErrorMessage);
+                var (value, type) = _validationResult.Value;
+                DrawersHelper.HelpBox(value, type.GetIconType());
             }
         }
 

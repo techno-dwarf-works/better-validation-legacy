@@ -1,6 +1,5 @@
 ﻿using Better.EditorTools.Helpers.Caching;
 using Better.Validation.Runtime.Attributes;
-using UnityEditor;
 using UnityEngine;
 
 namespace Better.Validation.EditorAddons.ValidationWrappers
@@ -13,6 +12,8 @@ namespace Better.Validation.EditorAddons.ValidationWrappers
         {
             _target = target;
         }
+
+        public override ValidationType Type => ValidationType.Error;
 
         public override Cache<string> Validate()
         {

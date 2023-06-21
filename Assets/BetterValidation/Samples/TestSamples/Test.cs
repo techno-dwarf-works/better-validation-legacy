@@ -16,14 +16,18 @@ public class TestManaged
 
 public class Test : MonoBehaviour
 {
-    [DataValidation(nameof(ValidateIntValue))]
-    [DataValidation(nameof(ValidateIntValueBool))]
-    [DataValidation(nameof(ValidateIntValueString))]
+    [DataValidation(nameof(ValidateIntValue), Type = ValidationType.Error)]
+    [DataValidation(nameof(ValidateIntValueBool), Type = ValidationType.Warning)]
+    [DataValidation(nameof(ValidateIntValueString), Type = ValidationType.Info)]
     [SerializeField] private int intValue;
     [SerializeField] private TestManaged _testManaged;
     
     [PrefabField]
     [SerializeField] private List<GameObject> _gameObject;
+    
+    
+
+    [SerializeField] private AnimationCurve _curve;
 
     private void ValidateIntValue(int value)
     {

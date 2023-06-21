@@ -1,5 +1,4 @@
 ﻿using System;
-using Better.EditorTools.Helpers.Caching;
 using Better.Validation.EditorAddons.ContextResolver;
 using Better.Validation.EditorAddons.Utilities;
 using Better.Validation.EditorAddons.ValidationWrappers;
@@ -18,6 +17,7 @@ namespace Better.Validation.EditorAddons
         public SerializedProperty Property { get; private set; }
         public string Result { get; private set; }
         public ValidationWrapper Wrapper { get; }
+        public ValidationType Type => Wrapper.Type;
         public bool IsValid { get; private set; }
 
         public ValidationCommandData(IterationData data, ValidationWrapper wrapper)

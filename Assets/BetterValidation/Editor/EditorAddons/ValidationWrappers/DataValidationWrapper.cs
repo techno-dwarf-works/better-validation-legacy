@@ -2,8 +2,8 @@
 using Better.EditorTools;
 using Better.EditorTools.Helpers;
 using Better.EditorTools.Helpers.Caching;
-using Better.EditorTools.Runtime;
 using Better.Extensions.Runtime;
+using Better.Tools.Runtime;
 using Better.Validation.Runtime.Attributes;
 
 namespace Better.Validation.EditorAddons.ValidationWrappers
