@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a02ae4bedf42c29b1abd8ca87a5605, type: 3}
   m_Name: BetterValidationSettings
   m_EditorClassIdentifier: 
-  ignoreWarnings: 1
+  buildLoggingLevel: 1

@@ -19,7 +19,8 @@ namespace Better.Validation.EditorAddons.Settings
 
         protected override void DrawGUI()
         {
-            EditorGUILayout.PropertyField(_settingsObject.FindProperty("ignoreWarnings"));
+            EditorGUILayout.PropertyField(_settingsObject.FindProperty("disableBuildValidation"));
+            EditorGUILayout.PropertyField(_settingsObject.FindProperty("buildLoggingLevel"));
         }
     }
 }

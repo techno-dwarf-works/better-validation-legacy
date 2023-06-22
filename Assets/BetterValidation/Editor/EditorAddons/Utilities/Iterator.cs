@@ -71,7 +71,7 @@ namespace Better.Validation.EditorAddons.Utilities
         }
 
 
-        public static async Task<List<ValidationCommandData>> ObjectsIteration(IReadOnlyList<Object> objs, OnPropertyIteration onPropertyIteration)
+        public static List<ValidationCommandData> ObjectsIteration(IReadOnlyList<Object> objs, OnPropertyIteration onPropertyIteration)
         {
             var list = new List<ValidationCommandData>();
             EditorUtility.DisplayProgressBar("Validating objects...", "", 0);
@@ -79,7 +79,7 @@ namespace Better.Validation.EditorAddons.Utilities
             {
                 var go = objs[index];
                 EditorUtility.DisplayProgressBar("Validating objects...", $"Validating {go.FullPath()}...", index / (float)objs.Count);
-                await Task.Yield();
+                //await Task.Yield();
                 list.AddRange(ObjectIteration(go, onPropertyIteration));
             }
 

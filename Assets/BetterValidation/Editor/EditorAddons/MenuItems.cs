@@ -14,33 +14,33 @@ namespace Better.Validation.EditorAddons
         }
 
         [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/Validate in Project", false, 50)]
-        private static async void ValidateInProject()
+        private static void ValidateInProject()
         {
-            ValidationWindow.OpenWindow(await Commands.ValidateAttributesInProject());
+            ValidationWindow.OpenWindow(Commands.ValidateAttributesInProject());
         }
 
         [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/Validate in Current scene", false, 50)]
-        private static async void ValidateInCurrentScene()
+        private static void ValidateInCurrentScene()
         {
-            ValidationWindow.OpenWindow(await Commands.ValidateAttributesInCurrentScene());
+            ValidationWindow.OpenWindow(Commands.ValidateAttributesInCurrentScene());
         }
 
         [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/Show Missing Object References in scene", false, 50)]
-        private static async void FindMissingReferencesInCurrentScene()
+        private static void FindMissingReferencesInCurrentScene()
         {
-            ValidationWindow.OpenWindow(await Commands.FindMissingReferencesInCurrentScene());
+            ValidationWindow.OpenWindow(Commands.FindMissingReferencesInCurrentScene());
         }
 
         [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/Show Missing Object References in assets", false, 52)]
-        private static async void MissingSpritesInAssets()
+        private static void MissingSpritesInAssets()
         {
-            ValidationWindow.OpenWindow(await Commands.MissingReferencesInProject());
+            ValidationWindow.OpenWindow(Commands.MissingReferencesInProject());
         }
 
         [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/Show Missing Object References in all scenes", false, 51)]
-        private static async void MissingInAllScenes()
+        private static void MissingInAllScenes()
         {
-            ValidationWindow.OpenWindow(await Commands.MissingInAllScenes());
+            ValidationWindow.OpenWindow(Commands.MissingInAllScenes());
         }
     }
 }

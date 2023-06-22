@@ -77,6 +77,7 @@ namespace Better.Validation.EditorAddons.WindowModule
                     {
                         _collectionDrawer = _groups[_groupID].CopyFrom(_collectionDrawer);
                     }
+
                     DrawCommandList();
                     DrawCommandButtons();
                 }

@@ -2,6 +2,7 @@
 using Better.Extensions.Runtime;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace Better.Validation.EditorAddons.Utilities

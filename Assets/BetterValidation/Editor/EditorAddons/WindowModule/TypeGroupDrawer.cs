@@ -20,7 +20,7 @@ namespace Better.Validation.EditorAddons.WindowModule
 
         public override CollectionDrawer Initialize(List<ValidationCommandData> data)
         {
-            _dataDictionary = new SortedDictionary<ValidationType, BetterTuple<bool, List<ValidationCommandData>>>();
+            _dataDictionary = new SortedDictionary<ValidationType, BetterTuple<bool, List<ValidationCommandData>>>(Comparer<ValidationType>.Create((x, y) => y.CompareTo(x)));
             foreach (var commandData in data)
             {
                 var iconType = commandData.Type;

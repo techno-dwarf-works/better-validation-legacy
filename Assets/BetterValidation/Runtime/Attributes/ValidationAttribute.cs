@@ -7,9 +7,9 @@ namespace Better.Validation.Runtime.Attributes
 {
     public enum ValidationType
     {
-        Error = 0,
+        Info = 0,
         Warning = 1,
-        Info = 2
+        Error = 2
     }
     
     [Conditional(BetterEditorDefines.Editor)]
