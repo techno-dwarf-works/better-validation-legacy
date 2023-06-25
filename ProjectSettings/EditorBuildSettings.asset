@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/BetterValidation/Samples/TestSamples/test.unity
+    guid: 8737d6e6555501d49b96ed99bc0ba2bd
   m_configObjects: {}
