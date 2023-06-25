@@ -1,0 +1,22 @@
+{
+    "name": "Better.Validation.Editor",
+    "rootNamespace": "Better.Validation",
+    "references": [
+        "GUID:441b78e90a9cf724ab41c6eed8c0b93d",
+        "GUID:19891d5296046644cbc12fcf3702cca3",
+        "GUID:443314a5a4e67c14a88ae223776b6554",
+        "GUID:28da8d3b12e3efa47928e0c9070f853d",
+        "GUID:a59e3daedde9ca94bba45364d4ead25f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
