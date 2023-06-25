@@ -32,6 +32,19 @@ namespace Better.Validation.EditorAddons
                 IteratorFilter.PropertyIterationWithAttributes);
         }
 
+        public List<ValidationCommandData> ValidateAttributesInAllScenes()
+        {
+            Iterator.SetContext(SceneResolver.Instance);
+            var list = new List<ValidationCommandData>();
+            foreach (var scene in EditorBuildSettings.scenes.Where(s => s.enabled))
+            {
+                var sceneReference = EditorSceneManager.OpenScene(scene.path);
+                list.AddRange(Iterator.ObjectsIteration(sceneReference.GetRootGameObjects(), IteratorFilter.PropertyIterationWithAttributes));
+            }
+
+            return list;
+        }
+
         public List<ValidationCommandData> MissingInAllScenes()
         {
             Iterator.SetContext(SceneResolver.Instance);
@@ -40,19 +53,6 @@ namespace Better.Validation.EditorAddons
             {
                 var sceneReference = EditorSceneManager.OpenScene(scene.path);
                 list.AddRange(Iterator.ObjectsIteration(sceneReference.GetRootGameObjects(), IteratorFilter.MissingPropertyIteration));
-            }
-
-            return list;
-        }
-        
-        public List<ValidationCommandData> ValidateInAllScenes()
-        {
-            Iterator.SetContext(SceneResolver.Instance);
-            var list = new List<ValidationCommandData>();
-            foreach (var scene in EditorBuildSettings.scenes.Where(s => s.enabled))
-            {
-                var sceneReference = EditorSceneManager.OpenScene(scene.path);
-                list.AddRange(Iterator.ObjectsIteration(sceneReference.GetRootGameObjects(), IteratorFilter.PropertyIterationWithAttributes));
             }
 
             return list;
@@ -74,7 +74,7 @@ namespace Better.Validation.EditorAddons
             return list;
         }
 
-        public List<ValidationCommandData> MissingReferencesInProject()
+        public List<ValidationCommandData> FindMissingReferencesInProject()
         {
             var allAssets = AssetDatabase.GetAllAssetPaths();
             var objs = allAssets.Select(a => AssetDatabase.LoadAssetAtPath(a, typeof(GameObject)) as GameObject).Where(a => a != null).ToArray();

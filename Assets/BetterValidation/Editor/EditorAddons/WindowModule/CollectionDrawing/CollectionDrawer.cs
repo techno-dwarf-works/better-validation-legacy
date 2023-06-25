@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Better.EditorTools.Helpers;
 using Better.Validation.EditorAddons.Utilities;
-using Better.Validation.Runtime.Attributes;
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.WindowModule
+namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
     public abstract class CollectionDrawer
     {
@@ -79,7 +77,7 @@ namespace Better.Validation.EditorAddons.WindowModule
 
                 if (GUILayout.Button("Show"))
                 {
-                    ValidationWindow.OpenReference(reference);
+                    ValidationExtensions.OpenReference(reference);
                     _currentItem = data;
                 }
             }
@@ -88,6 +86,7 @@ namespace Better.Validation.EditorAddons.WindowModule
         public abstract void ClearResolved();
 
         public abstract ValidationCommandData GetNext();
+        public abstract ValidationCommandData GetPrevious();
         public abstract void Revalidate();
         public abstract bool IsValid();
 

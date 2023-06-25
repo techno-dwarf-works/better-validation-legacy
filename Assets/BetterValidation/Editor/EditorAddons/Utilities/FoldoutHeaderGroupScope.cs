@@ -3,7 +3,7 @@ using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.WindowModule
+namespace Better.Validation.EditorAddons.Utilities
 {
     public class FoldoutHeaderGroupScope : GUI.Scope
     {

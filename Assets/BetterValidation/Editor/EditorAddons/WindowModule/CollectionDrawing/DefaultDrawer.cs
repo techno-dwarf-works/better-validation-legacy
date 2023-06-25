@@ -3,7 +3,7 @@ using System.Linq;
 using Better.EditorTools.Helpers;
 using UnityEditor;
 
-namespace Better.Validation.EditorAddons.WindowModule
+namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
     public class DefaultDrawer : CollectionDrawer
     {
@@ -44,6 +44,16 @@ namespace Better.Validation.EditorAddons.WindowModule
 
         public override ValidationCommandData GetNext()
         {
+            return GetAtDirection(1);
+        }
+        
+        public override ValidationCommandData GetPrevious()
+        {
+            return GetAtDirection(-1);
+        }
+
+        private ValidationCommandData GetAtDirection(int direction)
+        {
             if (_currentItem == null)
             {
                 _currentItem = _dataList.First();
@@ -51,7 +61,7 @@ namespace Better.Validation.EditorAddons.WindowModule
             else
             {
                 var index = _dataList.IndexOf(_currentItem);
-                index++;
+                index += direction;
                 if (index >= _dataList.Count)
                 {
                     index = 0;
@@ -62,7 +72,7 @@ namespace Better.Validation.EditorAddons.WindowModule
 
             return _currentItem;
         }
-
+        
         public override void Revalidate()
         {
             foreach (var commandData in _dataList)

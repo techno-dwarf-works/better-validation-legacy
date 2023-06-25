@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Better.EditorTools.SettingsTools;
 using Better.Validation.EditorAddons.Settings;
+using Better.Validation.EditorAddons.WindowModule;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
 using UnityEditor.Build;
@@ -27,7 +29,7 @@ namespace Better.Validation.EditorAddons.Utilities
             var commands = new ValidatorCommands();
             var commandDatas = new List<ValidationCommandData>();
             commandDatas.AddRange(commands.ValidateAttributesInProject());
-            commandDatas.AddRange(commands.ValidateInAllScenes());
+            commandDatas.AddRange(commands.ValidateAttributesInAllScenes());
 
             commandDatas = commandDatas.Where(x => x.Type >= _settings.BuildLoggingLevel).ToList();
             if (!commandDatas.Any()) return;
@@ -45,12 +47,14 @@ namespace Better.Validation.EditorAddons.Utilities
                 str.Append(Environment.NewLine);
             }
 
-            str.AppendLine("Do you want to proceed build?");
+            str.AppendLine("Do you want to ignore those issues?");
             str.Append(Environment.NewLine);
-            str.AppendLine("(You can disable validation in Player Settings -> Better -> Validation)");
+            str.Append(Environment.NewLine);
+            str.AppendFormat("(You can disable validation in Edit > Project Settings > {0} > {1})", BetterSettingsRegisterer.BetterPrefix, ValidationSettingsTool.SettingMenuItem);
             EditorApplication.Beep();
-            if (!EditorUtility.DisplayDialog("Validation failed", str.ToString(), "Proceed", "Cancel"))
+            if (!EditorUtility.DisplayDialog("Validation failed", str.ToString(), "Ignore", "Resolve"))
             {
+                ValidationWindow.OpenWindow(commandDatas);
                 throw new BuildFailedException("Pre build validation failed");
             }
         }
