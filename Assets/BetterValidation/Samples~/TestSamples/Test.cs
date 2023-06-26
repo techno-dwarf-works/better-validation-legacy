@@ -24,9 +24,9 @@ public class Test : MonoBehaviour
     [NotNullAttribute]
     [SerializeField] private GameObject _gameObject;
     
-    [DataValidation(nameof(ValidateIntValue), Type = ValidationType.Error)]
-    [DataValidation(nameof(ValidateIntValueBool), Type = ValidationType.Warning)]
-    [DataValidation(nameof(ValidateIntValueString), Type = ValidationType.Info)]
+    [DataValidation(nameof(ValidateIntValue), ValidationType = ValidationType.Error)]
+    [DataValidation(nameof(ValidateIntValueBool), ValidationType = ValidationType.Warning)]
+    [DataValidation(nameof(ValidateIntValueString), ValidationType = ValidationType.Info)]
     [SerializeField] private int intValue;
 
     private void ValidateIntValue(int value)
