@@ -16,6 +16,6 @@ namespace Better.Validation.Runtime.Attributes
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public abstract class ValidationAttribute : PropertyAttribute
     {
-        public ValidationType Type { get; set; } = ValidationType.Error;
+        public ValidationType ValidationType { get; set; } = ValidationType.Error;
     }
 }
