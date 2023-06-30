@@ -7,7 +7,7 @@
 <img src="https://github.com/uurha/BetterValidation/assets/22265817/b5286158-78b2-473b-a2c9-ebcd7544c3f2" alt="image" style="width:49%;">
 </p>
 
-The Bette Validation package provides attributes to perform validation in scenes and the whole project.
+The Better Validation package provides attributes to perform validation in scenes and the whole project.
 
 To initiate validation, you can go to `Toolbar > Better > Validation > Open Validation Window`, or it may start automatically prior to building (validation before play mode will be available in the future).
 
