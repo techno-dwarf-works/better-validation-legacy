@@ -5,7 +5,7 @@ using Better.Tools.Runtime;
 namespace Better.Validation.Runtime.Attributes
 {
     [Conditional(BetterEditorDefines.Editor)]
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field)]
     public class DataValidationAttribute : ValidationAttribute
     {
         public string MethodName { get; }

@@ -4,17 +4,17 @@ using UnityEditor;
 
 namespace Better.Validation.EditorAddons.Settings
 {
-    internal class ValidationSettingProvider : BetterSettingsProvider<BetterValidationSettings>
+    internal class ValidationSettingProvider : ProjectSettingsProvider<BetterValidationSettings>
     {
-        public ValidationSettingProvider() : base(BetterSettingsToolsContainer<ValidationSettingsTool>.Instance, SettingsScope.Project)
+        public ValidationSettingProvider() : base(ProjectSettingsToolsContainer<ValidationSettingsTool>.Instance, SettingsScope.Project)
         {
             keywords = new HashSet<string>(new[] { "Better", "Validation", "Warnings", "Ignore" });
         }
 
-        [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/" + BetterSettingsRegisterer.HighlightPrefix, false, 999)]
+        [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/" + ProjectSettingsRegisterer.HighlightPrefix, false, 999)]
         private static void Highlight()
         {
-            SettingsService.OpenProjectSettings(BetterSettingsToolsContainer<ValidationSettingsTool>.Instance.ProjectSettingKey);
+            SettingsService.OpenProjectSettings(ProjectSettingsToolsContainer<ValidationSettingsTool>.Instance.ProjectSettingKey);
         }
 
         protected override void DrawGUI()

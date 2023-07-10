@@ -1,7 +1,9 @@
-using System;
+using System.Reflection;
+using Better.EditorTools.Attributes;
 using Better.EditorTools.Drawers.Base;
 using Better.EditorTools.Helpers;
 using Better.EditorTools.Helpers.Caching;
+using Better.Tools.Runtime.Attributes;
 using Better.Validation.EditorAddons.Utilities;
 using Better.Validation.EditorAddons.ValidationWrappers;
 using Better.Validation.Runtime.Attributes;
@@ -10,11 +12,15 @@ using UnityEngine;
 
 namespace Better.Validation.EditorAddons.Drawers
 {
-    [CustomPropertyDrawer(typeof(ValidationAttribute), true)]
+    [MultiCustomPropertyDrawer(typeof(ValidationAttribute))]
     public class ValidationDrawer : MultiFieldDrawer<PropertyValidationWrapper>
     {
         private Cache<BetterTuple<string, ValidationType>> _validationResult = new Cache<BetterTuple<string, ValidationType>>();
-
+        
+        public ValidationDrawer(FieldInfo fieldInfo, MultiPropertyAttribute attribute) : base(fieldInfo, attribute)
+        {
+        }
+        
         protected override bool PreDraw(ref Rect position, SerializedProperty property, GUIContent label)
         {
             var cache = ValidateCachedProperties(property, ValidationUtility.Instance);
@@ -27,7 +33,7 @@ namespace Better.Validation.EditorAddons.Drawers
                     return false;
                 }
 
-                wrapper.SetProperty(property, (ValidationAttribute)attribute);
+                wrapper.SetProperty(property, (ValidationAttribute)_attribute);
             }
 
             if (wrapper.IsSupported())
@@ -42,11 +48,6 @@ namespace Better.Validation.EditorAddons.Drawers
         protected override Rect PreparePropertyRect(Rect original)
         {
             return original;
-        }
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            return EditorGUI.GetPropertyHeight(property, label);
         }
 
         protected override void PostDraw(Rect position, SerializedProperty property, GUIContent label)

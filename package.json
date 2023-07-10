@@ -5,7 +5,7 @@
   "unity": "2020.1",
   "description": " ",
   "dependencies": {
-    "com.uurha.bettereditortools": "0.9.7"
+    "com.uurha.bettereditortools": "1.0.5"
   },
   "author": {
     "name": "Arcueid D'athemon",

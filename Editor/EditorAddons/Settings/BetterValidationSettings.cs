@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Better.Validation.EditorAddons.Settings
 {
-    public class BetterValidationSettings : BetterSettings
+    public class BetterValidationSettings : ProjectSettings
     {
         [SerializeField] private bool disableBuildValidation;
         [SerializeField] private ValidationType buildLoggingLevel = ValidationType.Warning;
