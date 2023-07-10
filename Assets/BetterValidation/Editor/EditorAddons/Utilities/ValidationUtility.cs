@@ -10,50 +10,26 @@ namespace Better.Validation.EditorAddons.Utilities
 {
     public class ValidationUtility : BaseUtility<ValidationUtility>
     {
-        protected override WrappersTypeCollection GenerateCollection()
+        protected override BaseWrappersTypeCollection GenerateCollection()
         {
-            return new WrappersTypeCollection(AssignableFromComparer.Instance)
+            return new AttributeWrappersTypeCollection(AssignableFromComparer.Instance)
             {
-                {
-                    typeof(NotNullAttribute), new Dictionary<Type, Type>(AssignableFromComparer.Instance)
-                    {
-                        { typeof(UnityEngine.Object), typeof(NotNullWrapper) }
-                    }
-                },
-                {
-                    typeof(PrefabFieldAttribute), new Dictionary<Type, Type>(AssignableFromComparer.Instance)
-                    {
-                        { typeof(UnityEngine.Object), typeof(PrefabWrapper) }
-                    }
-                },
-                {
-                    typeof(SceneReferenceAttribute), new Dictionary<Type, Type>(AssignableFromComparer.Instance)
-                    {
-                        { typeof(UnityEngine.Object), typeof(SceneReferenceWrapper) }
-                    }
-                },
-                {
-                    typeof(FindAttribute), new Dictionary<Type, Type>(AssignableFromComparer.Instance)
-                    {
-                        { typeof(UnityEngine.Object), typeof(RequireComponentWrapper) }
-                    }
-                },
-                {
-                    typeof(DataValidationAttribute), new Dictionary<Type, Type>(AnyTypeComparer.Instance)
-                    {
-                        { typeof(Type), typeof(DataValidationWrapper) }
-                    }
-                }
+                { typeof(NotNullAttribute), typeof(NotNullWrapper) },
+                { typeof(PrefabReferenceAttribute), typeof(PrefabWrapper) },
+                { typeof(SceneReferenceAttribute), typeof(SceneReferenceWrapper) },
+                { typeof(FindAttribute), typeof(RequireComponentWrapper) },
+                { typeof(DataValidationAttribute), typeof(DataValidationWrapper) },
             };
+        }
+
+        public override bool IsSupported(Type type)
+        {
+            return true;
         }
 
         protected override HashSet<Type> GenerateAvailable()
         {
-            return new HashSet<Type>(AssignableFromComparer.Instance)
-            {
-                typeof(UnityEngine.Object), 
-                typeof(System.Object)
-            };
+            return new HashSet<Type>();
         }
     }
 }
