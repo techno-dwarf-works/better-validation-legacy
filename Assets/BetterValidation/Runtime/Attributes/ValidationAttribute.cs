@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Better.Tools.Runtime;
+using Better.Tools.Runtime.Attributes;
 using UnityEngine;
 
 namespace Better.Validation.Runtime.Attributes
@@ -13,8 +14,8 @@ namespace Better.Validation.Runtime.Attributes
     }
     
     [Conditional(BetterEditorDefines.Editor)]
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public abstract class ValidationAttribute : PropertyAttribute
+    [AttributeUsage(AttributeTargets.Field)]
+    public abstract class ValidationAttribute : MultiPropertyAttribute
     {
         public ValidationType ValidationType { get; set; } = ValidationType.Error;
     }

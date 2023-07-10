@@ -12,6 +12,7 @@ namespace Better.Validation.Runtime.Attributes
     }
 
     [Conditional(BetterEditorDefines.Editor)]
+    [AttributeUsage(AttributeTargets.Field)]
     public class FindAttribute : ValidationAttribute
     {
         public Type RequiredType { get; }

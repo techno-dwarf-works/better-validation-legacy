@@ -6,7 +6,7 @@ namespace Better.Validation.Runtime.Attributes
 {
     [Conditional(BetterEditorDefines.Editor)]
     [AttributeUsage(AttributeTargets.Field)]
-    public class NotNullAttribute : ValidationAttribute
+    public class PrefabReferenceAttribute : ValidationAttribute
     {
     }
 }

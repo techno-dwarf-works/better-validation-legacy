@@ -18,14 +18,12 @@ public class Test : MonoBehaviour
 {
     [SerializeField] private TestManaged _testManaged;
     
-    [PrefabField]
+    [PrefabReference]
     [SerializeField] private List<GameObject> _gameObjects;
     
-    [NotNullAttribute]
+    [NotNull]
     [SerializeField] private GameObject _gameObject;
     
-    [DataValidation(nameof(ValidateIntValue), ValidationType = ValidationType.Error)]
-    [DataValidation(nameof(ValidateIntValueBool), ValidationType = ValidationType.Warning)]
     [DataValidation(nameof(ValidateIntValueString), ValidationType = ValidationType.Info)]
     [SerializeField] private int intValue;
 
