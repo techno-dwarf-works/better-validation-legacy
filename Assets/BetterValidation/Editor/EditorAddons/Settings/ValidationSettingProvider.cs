@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace Better.Validation.EditorAddons.Settings
 {
-    internal class ValidationSettingProvider : ProjectSettingsProvider<BetterValidationSettings>
+    internal class ValidationSettingProvider : ProjectSettingsProvider<ValidationSettings>
     {
         public ValidationSettingProvider() : base(ProjectSettingsToolsContainer<ValidationSettingsTool>.Instance, SettingsScope.Project)
         {

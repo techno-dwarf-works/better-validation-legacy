@@ -15,12 +15,12 @@ namespace Better.Validation.EditorAddons.Utilities
 {
     public class ValidationBuildProcess : IPreprocessBuildWithReport
     {
-        private readonly BetterValidationSettings _settings;
+        private readonly ValidationSettings _settings;
         public int callbackOrder { get; }
 
         public ValidationBuildProcess()
         {
-            _settings = Resources.Load<BetterValidationSettings>(nameof(BetterValidationSettings));
+            _settings = Resources.Load<ValidationSettings>(nameof(ValidationSettings));
         }
 
         public void OnPreprocessBuild(BuildReport report)

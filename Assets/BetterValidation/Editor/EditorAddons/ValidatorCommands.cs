@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Better.Validation.EditorAddons.ContextResolver;
 using Better.Validation.EditorAddons.Utilities;
+using Better.Validation.EditorAddons.ValidationIterator;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Better.Validation.EditorAddons
             return list;
         }
 
-        public List<ValidationCommandData> MissingInAllScenes()
+        public List<ValidationCommandData> FindMissingInAllScenes()
         {
             Iterator.SetContext(SceneResolver.Instance);
             var list = new List<ValidationCommandData>();
