@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Better.EditorTools.Helpers;
 using Better.Extensions.Runtime;
 using Better.Validation.EditorAddons.Utilities;
-using Better.Validation.EditorAddons.WindowModule.Pages.SubPage;
+using Better.Validation.EditorAddons.WindowModule.Pages.Tab;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages
 
         private IValidationTab[] _buttons;
         private IValidationTab _currentTab;
+        private Vector2 _scrollPosition;
 
         public void Initialize()
         {
@@ -38,10 +40,13 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages
             List<ValidationCommandData> list = null;
             using (new EditorGUILayout.HorizontalScope())
             {
-                _groupID = ToolsGUIUtility.Sidebar(Vector2.zero, _groupID, _groupNames, out var isChanged);
+                _groupID = ToolsGUIUtility.Sidebar(ref _scrollPosition, _groupID, _groupNames, out var isChanged);
                 if (isChanged)
                     _currentTab = _buttons[_groupID];
-                list = _currentTab.DrawUpdate();
+                using (new EditorGUILayout.HorizontalScope(Styles.DefaultContentMargins))
+                {
+                    list = _currentTab.DrawUpdate();
+                }
             }
 
             if (list != null)

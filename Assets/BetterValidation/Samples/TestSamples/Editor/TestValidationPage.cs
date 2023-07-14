@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Better.Validation.EditorAddons;
 using Better.Validation.EditorAddons.Iteration;
-using Better.Validation.EditorAddons.WindowModule.Pages.SubPage;
+using Better.Validation.EditorAddons.WindowModule.Pages.Tab;
 using UnityEditor;
 using UnityEngine;
 

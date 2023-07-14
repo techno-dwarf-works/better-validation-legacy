@@ -2,14 +2,15 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.WindowModule.Pages.SubPage
+namespace Better.Validation.EditorAddons.WindowModule.Pages.Tab
 {
-    public class ValidateTab : BaseValidationTab
+    public class MissingReferenceTab : BaseValidationTab
     {
         private GUIContent _bottomText;
-        private const string Name = "Validate";
+        private GUIStyle _style;
+        private const string Name = "Find Missing References";
 
-        public override int Order => 0;
+        public override int Order => 1;
 
         public override string GetTabName()
         {
@@ -19,7 +20,9 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages.SubPage
         public override void Initialize()
         {
             base.Initialize();
-            _bottomText = new GUIContent("Validation commands will go through Unity SerializedProperties and run validation attributes");
+            _bottomText = new GUIContent("Those commands looking for missing references in Unity SerializedProperties");
+            _style = new GUIStyle(EditorStyles.label);
+            _style.wordWrap = true;
         }
 
         public override List<ValidationCommandData> DrawUpdate()
@@ -35,22 +38,22 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages.SubPage
                 {
                     if (GUILayout.Button("In Current Scene"))
                     {
-                        return _commands.ValidateAttributesInCurrentScene();
+                        return _commands.FindMissingReferencesInCurrentScene();
                     }
 
                     if (GUILayout.Button("In All Scenes"))
                     {
-                        return _commands.ValidateAttributesInAllScenes();
+                        return _commands.FindMissingInAllScenes();
                     }
 
                     if (GUILayout.Button("In Project"))
                     {
-                        return _commands.ValidateAttributesInProject();
+                        return _commands.FindMissingReferencesInProject();
                     }
                 }
-
+                
                 GUILayout.FlexibleSpace();
-                EditorGUILayout.LabelField(_bottomText);
+                EditorGUILayout.LabelField(_bottomText, _style);
             }
 
             return null;

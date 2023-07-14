@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Better.Validation.EditorAddons.WindowModule.Pages.SubPage
+namespace Better.Validation.EditorAddons.WindowModule.Pages.Tab
 {
     public interface IValidationTab
     {
