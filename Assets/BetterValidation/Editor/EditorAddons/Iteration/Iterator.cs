@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using Better.Validation.EditorAddons.ContextResolver;
-using Better.Validation.EditorAddons.Iteration;
 using Better.Validation.EditorAddons.Utilities;
 using Better.Validation.EditorAddons.Wrappers;
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.ValidationIterator
+namespace Better.Validation.EditorAddons.Iteration
 {
     public static class Iterator
     {

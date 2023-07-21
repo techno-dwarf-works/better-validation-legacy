@@ -3,12 +3,11 @@ using Better.EditorTools;
 using Better.EditorTools.Drawers.Base;
 using Better.EditorTools.Helpers.Caching;
 using Better.Extensions.Runtime;
-using Better.Validation.EditorAddons.Iteration;
 using Better.Validation.EditorAddons.Utilities;
 using Better.Validation.EditorAddons.Wrappers;
 using Better.Validation.Runtime.Attributes;
 
-namespace Better.Validation.EditorAddons.ValidationIterator
+namespace Better.Validation.EditorAddons.Iteration
 {
     public static class IteratorFilter
     {

@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Better.Validation.EditorAddons.ContextResolver;
+using Better.Validation.EditorAddons.Iteration;
 using Better.Validation.EditorAddons.Utilities;
-using Better.Validation.EditorAddons.ValidationIterator;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;

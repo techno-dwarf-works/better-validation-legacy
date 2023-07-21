@@ -11,7 +11,7 @@ using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.Utilities
+namespace Better.Validation.EditorAddons.PreBuildValidation
 {
     public class ValidationBuildProcess : IPreprocessBuildWithReport
     {
@@ -26,10 +26,13 @@ namespace Better.Validation.EditorAddons.Utilities
         public void OnPreprocessBuild(BuildReport report)
         {
             if(_settings.DisableBuildValidation) return;
-            var commands = new ValidatorCommands();
             var commandDatas = new List<ValidationCommandData>();
-            commandDatas.AddRange(commands.ValidateAttributesInProject());
-            commandDatas.AddRange(commands.ValidateAttributesInAllScenes());
+
+            var validationSteps = _settings.GetSteps();
+            foreach (var buildValidationStep in validationSteps)
+            {
+                commandDatas.AddRange(buildValidationStep.GatherValidationData());
+            }
 
             commandDatas = commandDatas.Where(x => x.Type >= _settings.BuildLoggingLevel).ToList();
             if (!commandDatas.Any()) return;

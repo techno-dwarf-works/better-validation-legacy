@@ -6,10 +6,15 @@ namespace Better.Validation.EditorAddons.Settings
 {
     internal class ValidationSettingProvider : ProjectSettingsProvider<ValidationSettings>
     {
+        private readonly Editor _editor;
+
         public ValidationSettingProvider() : base(ProjectSettingsToolsContainer<ValidationSettingsTool>.Instance, SettingsScope.Project)
         {
             keywords = new HashSet<string>(new[] { "Better", "Validation", "Warnings", "Ignore" });
+            _editor = Editor.CreateEditor(_settingsObject.targetObject);
+            label = ValidationSettingsTool.SettingMenuItem;
         }
+
 
         [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/" + ProjectSettingsRegisterer.HighlightPrefix, false, 999)]
         private static void Highlight()
@@ -19,8 +24,7 @@ namespace Better.Validation.EditorAddons.Settings
 
         protected override void DrawGUI()
         {
-            EditorGUILayout.PropertyField(_settingsObject.FindProperty("disableBuildValidation"));
-            EditorGUILayout.PropertyField(_settingsObject.FindProperty("buildLoggingLevel"));
+            _editor.OnInspectorGUI();
         }
     }
 }

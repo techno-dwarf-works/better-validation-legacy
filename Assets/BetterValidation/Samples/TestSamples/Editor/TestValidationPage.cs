@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using Better.Validation.EditorAddons;
-using Better.Validation.EditorAddons.Iteration;
 using Better.Validation.EditorAddons.WindowModule.Pages.Tab;
 using UnityEditor;
 using UnityEngine;
 
-namespace Samples.TestSamples.Editor
+namespace BetterValidation.Samples.TestSamples.Editor
 {
     public class TestValidationPage : IValidationTab
     {
@@ -13,7 +12,7 @@ namespace Samples.TestSamples.Editor
 
         public string GetTabName()
         {
-            return "Test Button";
+            return "Custom Validation";
         }
 
         public void Initialize()

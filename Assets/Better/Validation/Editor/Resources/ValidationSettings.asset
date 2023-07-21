@@ -14,3 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   disableBuildValidation: 0
   buildLoggingLevel: 1
+  validationSteps:
+  - rid: 4526805294491369485
+  - rid: 4526805294491369507
+  references:
+    version: 2
+    RefIds:
+    - rid: 4526805294491369485
+      type: {class: ProjectValidationStep, ns: Better.Validation.EditorAddons.PreBuildValidation.Models, asm: Better.Validation.Editor}
+    - rid: 4526805294491369507
+      type: {class: AllSceneValidationStep, ns: Better.Validation.EditorAddons.PreBuildValidation.Models, asm: Better.Validation.Editor}
