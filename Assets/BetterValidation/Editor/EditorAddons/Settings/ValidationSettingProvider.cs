@@ -11,10 +11,8 @@ namespace Better.Validation.EditorAddons.Settings
         public ValidationSettingProvider() : base(ProjectSettingsToolsContainer<ValidationSettingsTool>.Instance, SettingsScope.Project)
         {
             keywords = new HashSet<string>(new[] { "Better", "Validation", "Warnings", "Ignore" });
-            _editor = Editor.CreateEditor(_settingsObject.targetObject);
-            label = ValidationSettingsTool.SettingMenuItem;
+            _editor = Editor.CreateEditor(_settings);
         }
-
 
         [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/" + ProjectSettingsRegisterer.HighlightPrefix, false, 999)]
         private static void Highlight()

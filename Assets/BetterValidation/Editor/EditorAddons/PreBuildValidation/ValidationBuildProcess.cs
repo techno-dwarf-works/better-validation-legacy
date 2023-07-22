@@ -53,7 +53,7 @@ namespace Better.Validation.EditorAddons.PreBuildValidation
             str.AppendLine("Do you want to ignore those issues?");
             str.Append(Environment.NewLine);
             str.Append(Environment.NewLine);
-            str.AppendFormat("(You can disable validation in Edit > Project Settings > {0} > {1})", ProjectSettingsRegisterer.BetterPrefix, ValidationSettingsTool.SettingMenuItem);
+            str.AppendFormat("(You can disable validation in Edit > Project Settings > {0} > {1})", ProjectSettingsRegisterer.BetterPrefix, ProjectSettingsToolsContainer<ValidationSettingsTool>.Instance.NamespacePrefix);
             EditorApplication.Beep();
             if (!EditorUtility.DisplayDialog("Validation failed", str.ToString(), "Ignore", "Resolve"))
             {

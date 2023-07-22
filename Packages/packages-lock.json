@@ -172,12 +172,12 @@
       "url": "https://package.openupm.com"
     },
     "com.uurha.bettereditortools": {
-      "version": "1.0.51",
+      "version": "1.0.53",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.uurha.betterdatastructures": "0.1.0",
-        "com.uurha.betterextensions": "1.1.8"
+        "com.uurha.betterextensions": "1.1.91"
       },
       "url": "https://package.openupm.com"
     },
