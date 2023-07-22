@@ -55,7 +55,7 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages
                 }
                 else
                 {
-                    _groupID = BetterGUIUtility.Toolbar(_groupID, _groupNames, out var isChanged);
+                    _groupID = ToolsGUIUtility.Toolbar(_groupID, _groupNames, out var isChanged);
                     if (isChanged)
                     {
                         _collectionDrawer = _groups[_groupID].CopyFrom(_collectionDrawer);

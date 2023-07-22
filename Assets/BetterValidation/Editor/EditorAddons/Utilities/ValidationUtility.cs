@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Better.EditorTools.Comparers;
 using Better.EditorTools.Drawers.Base;
 using Better.EditorTools.Utilities;
-using Better.Validation.EditorAddons.ValidationWrappers;
+using Better.Validation.EditorAddons.Wrappers;
 using Better.Validation.Runtime.Attributes;
 
 namespace Better.Validation.EditorAddons.Utilities

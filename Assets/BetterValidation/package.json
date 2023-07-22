@@ -1,11 +1,11 @@
 {
   "name": "com.uurha.bettervalidation",
   "displayName": "Better Validation",
-  "version": "1.0.5",
+  "version": "1.0.51",
   "unity": "2020.1",
   "description": " ",
   "dependencies": {
-    "com.uurha.bettereditortools": "1.0.5"
+    "com.uurha.bettereditortools": "1.0.53"
   },
   "author": {
     "name": "Arcueid D'athemon",
