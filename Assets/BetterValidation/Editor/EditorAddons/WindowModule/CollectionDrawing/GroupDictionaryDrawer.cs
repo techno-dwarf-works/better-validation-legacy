@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
-    public abstract class GroupDictionaryDrawer<TKey, TDictionary> : CollectionDrawer where TDictionary: class, IDictionary<TKey, BetterTuple<bool, List<ValidationCommandData>>>
+    public abstract class GroupDictionaryDrawer<TKey, TDictionary> : CollectionDrawer where TDictionary: class, IDictionary<TKey, MutableTuple<bool, List<ValidationCommandData>>>
     {
         protected TDictionary _dataDictionary = null;
         protected int _count;

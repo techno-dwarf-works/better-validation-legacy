@@ -46,15 +46,15 @@ namespace Better.Validation.EditorAddons.Iteration
 
                 var so = new SerializedObject(obj);
                 CacheData.SetContext(so);
-                so.forceChildVisibility = true;
+                //so.forceChildVisibility = true;
                 so.Update();
                 var sp = so.GetIterator();
 
                 var copy = sp.Copy();
-                if (copy.NextVisible(true))
+                if (copy.Next(true))
                 {
                     var count = copy.CountInProperty();
-                    while (sp.NextVisible(true))
+                    while (sp.Next(true))
                     {
                         var remainingCopy = sp.Copy();
                         EditorUtility.DisplayProgressBar("Validating property...", $"Validating {sp.propertyPath}...",
