@@ -64,14 +64,15 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
             {
                 var reference = data.Target;
 
-                var icon = EditorGUIUtility.GetIconForObject(reference);
                 var csIcon = EditorGUIUtility.IconContent("cs Script Icon");
                 csIcon.text = reference.GetType().Name;
+#if UNITY_2021_2_OR_NEWER
+                var icon = EditorGUIUtility.GetIconForObject(reference);
                 if (icon)
                 {
                     csIcon.image = icon;
                 }
-
+#endif
                 EditorGUILayout.LabelField(csIcon);
                 EditorGUILayout.Space(DrawersHelper.SpaceHeight);
 

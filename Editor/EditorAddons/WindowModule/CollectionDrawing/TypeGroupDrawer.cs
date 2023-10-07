@@ -4,7 +4,7 @@ using Better.Validation.Runtime.Attributes;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
-    public class TypeGroupDrawer : GroupDictionaryDrawer<ValidationType, SortedDictionary<ValidationType, BetterTuple<bool, List<ValidationCommandData>>>>
+    public class TypeGroupDrawer : GroupDictionaryDrawer<ValidationType, SortedDictionary<ValidationType, MutableTuple<bool, List<ValidationCommandData>>>>
     {
         public override int Order { get; } = 1;
 
@@ -16,13 +16,13 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
         public override CollectionDrawer Initialize(List<ValidationCommandData> data)
         {
             _dataDictionary =
-                new SortedDictionary<ValidationType, BetterTuple<bool, List<ValidationCommandData>>>(Comparer<ValidationType>.Create((x, y) => y.CompareTo(x)));
+                new SortedDictionary<ValidationType, MutableTuple<bool, List<ValidationCommandData>>>(Comparer<ValidationType>.Create((x, y) => y.CompareTo(x)));
             foreach (var commandData in data)
             {
                 var iconType = commandData.Type;
                 if (!_dataDictionary.TryGetValue(iconType, out var list))
                 {
-                    list = new BetterTuple<bool, List<ValidationCommandData>>(iconType == ValidationType.Error || commandData == _currentItem,
+                    list = new MutableTuple<bool, List<ValidationCommandData>>(iconType == ValidationType.Error || commandData == _currentItem,
                         new List<ValidationCommandData>());
                     _dataDictionary.Add(iconType, list);
                 }

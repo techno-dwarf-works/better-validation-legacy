@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Better.EditorTools.Helpers;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
@@ -7,6 +8,12 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using Better.Extensions.Runtime;
+
+#if !UNITY_2021_2_OR_NEWER
+using UnityEditor.Experimental.SceneManagement;
+#endif
+
 
 namespace Better.Validation.EditorAddons.Utilities
 {
@@ -30,9 +37,20 @@ namespace Better.Validation.EditorAddons.Utilities
                 var transform = component.transform;
                 if (PrefabUtility.IsPartOfPrefabAsset(reference))
                 {
-                    var stage = PrefabStageUtility.OpenPrefab(AssetDatabase.GetAssetPath(reference));
+                    var assetPath = AssetDatabase.GetAssetPath(reference);
+                    Transform prefabRootTransform = null;
+#if !UNITY_2021_2_OR_NEWER
+                    var obj = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+                    AssetDatabase.OpenAsset(obj);
+                    var stage = PrefabStageUtility.GetCurrentPrefabStage();
+                    prefabRootTransform = stage.prefabContentsRoot.transform;
+#else
+                    var stage = PrefabStageUtility.OpenPrefab(assetPath);
+                    prefabRootTransform = stage.prefabContentsRoot.transform;
+#endif
                     var indexes = GetParentIndices(transform);
-                    transform = GetChildBySiblingIndices(stage.prefabContentsRoot.transform, indexes);
+
+                    transform = GetChildBySiblingIndices(prefabRootTransform, indexes);
                 }
                 else
                 {

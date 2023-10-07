@@ -10,6 +10,10 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#if !UNITY_2021_1_OR_NEWER
+using UnityEditor.Experimental.SceneManagement;
+#endif
+
 namespace Better.Validation.EditorAddons.WindowModule.Pages
 {
     public class ResultPage : IWindowPage
