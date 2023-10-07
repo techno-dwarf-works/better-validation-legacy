@@ -15,7 +15,7 @@ namespace Better.Validation.EditorAddons.Drawers
     [MultiCustomPropertyDrawer(typeof(ValidationAttribute))]
     public class ValidationDrawer : MultiFieldDrawer<PropertyValidationWrapper>
     {
-        private Cache<BetterTuple<string, ValidationType>> _validationResult = new Cache<BetterTuple<string, ValidationType>>();
+        private Cache<MutableTuple<string, ValidationType>> _validationResult = new Cache<MutableTuple<string, ValidationType>>();
         
         public ValidationDrawer(FieldInfo fieldInfo, MultiPropertyAttribute attribute) : base(fieldInfo, attribute)
         {
@@ -39,7 +39,7 @@ namespace Better.Validation.EditorAddons.Drawers
             if (wrapper.IsSupported())
             {
                 var validation = wrapper.Validate();
-                _validationResult.Set(validation.IsValid, new BetterTuple<string, ValidationType>(validation.Value, wrapper.Type));
+                _validationResult.Set(validation.IsValid, new MutableTuple<string, ValidationType>(validation.Value, wrapper.Type));
             }
 
             return true;

@@ -1,14 +1,14 @@
 ﻿namespace Better.Validation.EditorAddons
 {
-    public class BetterTuple<T1, T2>
+    public class MutableTuple<T1, T2>
     {
-        public BetterTuple(T1 item1, T2 item2)
+        public MutableTuple(T1 item1, T2 item2)
         {
             Item1 = item1;
             Item2 = item2;
         }
         
-        public BetterTuple()
+        public MutableTuple()
         {
             Item1 = default;
             Item2 = default;

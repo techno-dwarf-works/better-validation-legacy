@@ -33,34 +33,11 @@ namespace Better.Validation.EditorAddons.Utilities
             margin = new RectOffset()
         };
 
-        public static GUIStyle _overridesHoverHighlight = "HoverHighlight";
-        public static GUIStyle _hoveredItemBackgroundStyle = "WhiteBackground";
-
         public static int Toolbar(int groupID, string[] groupNames, out bool changed)
         {
             var id = GUILayout.Toolbar(groupID, groupNames);
             changed = id != groupID;
             return id;
-        }
-
-        public static void DrawHorizontalLine(Color color, int thickness = 2, int padding = 10)
-        {
-            Rect r = EditorGUILayout.GetControlRect(GUILayout.Height(padding + thickness));
-            r.height = thickness;
-            r.y += padding / 2f;
-            r.x -= 2;
-            r.width += 6;
-            EditorGUI.DrawRect(r, color);
-        }
-
-        public static void DrawVerticalLine(Color color, int thickness = 1, int padding = 10)
-        {
-            Rect r = EditorGUILayout.GetControlRect(GUILayout.Width(padding + thickness));
-            r.width = thickness;
-            r.x += padding / 2f;
-            r.y -= 2;
-            r.height += 6f;
-            EditorGUI.DrawRect(r, color);
         }
 
         private static void DrawVerticalLineFull(Color color, int thickness = 1, int padding = 10)
