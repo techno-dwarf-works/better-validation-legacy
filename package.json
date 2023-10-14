@@ -1,20 +1,20 @@
 {
   "name": "com.uurha.bettervalidation",
   "displayName": "Better Validation",
-  "version": "1.0.54",
+  "version": "1.0.55",
   "unity": "2020.1",
   "description": " ",
   "dependencies": {
-    "com.uurha.bettereditortools": "1.0.61"
+    "com.uurha.bettereditortools": "1.0.62"
   },
   "author": {
-    "name": "Arcueid D'athemon",
-    "url": "https://github.com/uurha"
+    "name": "Better Plugins",
+    "url": "https://github.com/techno-dwarf-works"
   },
-  "changelogUrl": "https://github.com/uurha/BetterValidation",
-  "documentationUrl": "https://github.com/uurha/BetterValidation/tree/main#readme",
+  "changelogUrl": "https://github.com/techno-dwarf-works/better-validation",
+  "documentationUrl": "https://github.com/techno-dwarf-works/better-validation/tree/main#readme",
   "license": "MIT",
-  "licensesUrl":"https://github.com/uurha/BetterValidation/blob/main/LICENSE",
+  "licensesUrl":"https://github.com/techno-dwarf-works/better-validation/blob/main/LICENSE",
   "keywords": [
     "Custom Editor",
     "Attributes",
