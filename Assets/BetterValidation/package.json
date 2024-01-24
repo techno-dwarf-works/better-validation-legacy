@@ -1,11 +1,11 @@
 {
   "name": "com.uurha.bettervalidation",
   "displayName": "Better Validation",
-  "version": "1.0.55",
+  "version": "1.0.60",
   "unity": "2020.1",
   "description": " ",
   "dependencies": {
-    "com.uurha.bettereditortools": "1.0.62"
+    "com.uurha.bettereditortools": "1.0.68"
   },
   "author": {
     "name": "Better Plugins",
