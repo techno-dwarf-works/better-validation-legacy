@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Better.EditorTools.SettingsTools;
+using Better.Tools.Runtime;
 using UnityEditor;
 
 namespace Better.Validation.EditorAddons.Settings
@@ -14,7 +15,7 @@ namespace Better.Validation.EditorAddons.Settings
             _editor = Editor.CreateEditor(_settings);
         }
 
-        [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/" + ProjectSettingsRegisterer.HighlightPrefix, false, 999)]
+        [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/" + BetterEditorDefines.HighlightPrefix, false, 999)]
         private static void Highlight()
         {
             SettingsService.OpenProjectSettings(ProjectSettingsToolsContainer<ValidationSettingsTool>.Instance.ProjectSettingKey);
