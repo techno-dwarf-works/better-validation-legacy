@@ -6,7 +6,7 @@ namespace Better.Validation.EditorAddons
 {
     public static class MenuItems
     {
-        [MenuItem(ValidationSettingsTool.MenuItemPrefix + "/Open Validation Window", false, 50)]
+        [MenuItem(ValidationSettingProvider.Path + "/Open Validation Window", false, 50)]
         private static void ValidateInProject()
         {
             ValidationWindow.OpenWindow();

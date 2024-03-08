@@ -1,9 +1,10 @@
 ﻿using System;
-using Better.EditorTools;
-using Better.EditorTools.Helpers;
-using Better.EditorTools.Helpers.DropDown;
+using System.Linq;
+using Better.EditorTools.EditorAddons.Helpers;
+using Better.EditorTools.EditorAddons.Helpers.DropDown;
+using Better.Extensions.EditorAddons;
 using Better.Extensions.Runtime;
-using Better.Validation.EditorAddons.PreBuildValidation.Interfaces;
+using Better.Validation.EditorAddons.PreBuildValidation;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Better.Validation.EditorAddons.Settings
 
         public BuildValidationStepsDrawer(SerializedObject settingsObject, SerializedProperty stepsProperty)
         {
-            _types = typeof(IBuildValidationStep).GetAllInheritedType();
+            _types = typeof(IBuildValidationStep).GetAllInheritedTypesWithoutUnityObject().ToArray();
             _stepsProperty = stepsProperty;
 
             _reorderableList = new ReorderableList(settingsObject, _stepsProperty, true, true, true, true)
@@ -46,7 +47,6 @@ namespace Better.Validation.EditorAddons.Settings
 
         private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            
             var property = _stepsProperty.GetArrayElementAtIndex(index);
             
             var type = property.GetManagedType();

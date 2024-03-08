@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Better.EditorTools.Helpers;
+using Better.EditorTools.EditorAddons.Helpers;
 using Better.Extensions.Runtime;
-using Better.Validation.EditorAddons.Utilities;
+using Better.Validation.EditorAddons.Utility;
 using Better.Validation.EditorAddons.WindowModule.CollectionDrawing;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-#if !UNITY_2021_1_OR_NEWER
-using UnityEditor.Experimental.SceneManagement;
-#endif
-
-namespace Better.Validation.EditorAddons.WindowModule.Pages
+namespace Better.Validation.EditorAddons.WindowModule
 {
     public class ResultPage : IWindowPage
     {
@@ -42,13 +38,15 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages
 
         public void Initialize()
         {
-            _groups = typeof(CollectionDrawer).GetAllInheritedType().Select(x => (CollectionDrawer)Activator.CreateInstance(x)).OrderBy(x => x.Order).ToArray();
+            _groups = typeof(CollectionDrawer).GetAllInheritedTypesWithoutUnityObject()
+                .Select(x => (CollectionDrawer)Activator.CreateInstance(x)).OrderBy(x => x.Order).ToArray();
             _groupNames = _groups.Select(x => x.GetOptionName()).ToArray();
         }
 
         public IWindowPage DrawUpdate()
         {
             if (_collectionDrawer == null || !_collectionDrawer.IsValid()) return null;
+            if (_groups.Length <= 0) return null;
             using (new EditorGUILayout.VerticalScope())
             {
                 if (DrawBackControl(out var backPage)) return backPage;
@@ -139,7 +137,7 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages
 
             var nextObject = _collectionDrawer.GetNext();
 
-            ValidationExtensions.OpenReference(nextObject.Target);
+            ValidationUtility.OpenReference(nextObject.Target);
         }
 
         private void DrawPrevButton()
@@ -148,14 +146,7 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages
 
             var nextObject = _collectionDrawer.GetPrevious();
 
-            ValidationExtensions.OpenReference(nextObject.Target);
-        }
-
-        public void DrawBackButton()
-        {
-            var nextObject = _collectionDrawer.GetNext();
-
-            ValidationExtensions.OpenReference(nextObject.Target);
+            ValidationUtility.OpenReference(nextObject.Target);
         }
 
         private void DrawClearButton()

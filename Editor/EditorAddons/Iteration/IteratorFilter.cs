@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Better.EditorTools;
-using Better.EditorTools.Drawers.Base;
-using Better.EditorTools.Helpers.Caching;
+using System.Text;
+using Better.EditorTools.EditorAddons.Drawers.Base;
+using Better.EditorTools.EditorAddons.Helpers.Caching;
+using Better.Extensions.EditorAddons;
 using Better.Extensions.Runtime;
-using Better.Validation.EditorAddons.Utilities;
+using Better.Validation.EditorAddons.Utility;
 using Better.Validation.EditorAddons.Wrappers;
 using Better.Validation.Runtime.Attributes;
 
@@ -11,7 +12,7 @@ namespace Better.Validation.EditorAddons.Iteration
 {
     public static class IteratorFilter
     {
-        private class LocalCache : Cache<WrapperCollectionValue<PropertyValidationWrapper>>
+        private class LocalCache : CacheValue<WrapperCollectionValue<PropertyValidationWrapper>>
         {
         }
 
@@ -26,11 +27,16 @@ namespace Better.Validation.EditorAddons.Iteration
             var list = data.Property.GetAttributes<ValidationAttribute>();
             if (fieldInfo == null || list == null) return null;
 
-            var fieldType = fieldInfo.FieldInfo.GetFieldOrElementType();
+            var fieldType = fieldInfo.FieldInfo.FieldType;
+            if (fieldType.IsArrayOrList())
+            {
+                fieldType = fieldType.GetCollectionElementType();
+            }
+
             var dataList = new List<ValidationCommandData>();
             foreach (var validationAttribute in list)
             {
-                Wrappers.ValidateCachedProperties(CacheField, data.Property, fieldType, validationAttribute.GetType(), ValidationUtility.Instance);
+                ValidateCachedPropertiesUtility.Validate(Wrappers, CacheField, data.Property, fieldType, validationAttribute.GetType(), ValidationAttributeUtility.Instance);
 
                 var fieldValue = CacheField.Value;
                 if (fieldValue == null)
@@ -81,10 +87,17 @@ namespace Better.Validation.EditorAddons.Iteration
             var property = commandData.Property;
             var path = property.IsArrayElement() ? property.GetArrayPath() : property.displayName;
             var target = commandData.Target;
-            var str =
-                $"Validation failed with: <b>{result}</b>.\nPath: <i><b>{commandData.ContextResolver.Resolve(target)}</b></i>. Component: <i><b>{target.GetType().Name}</b></i>, Property: <i><b>{path}</b></i>";
+            var resolvedPath = commandData.PathResolver.Resolve(target);
+            var typeName = target.GetType().Name;
+            
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendFormat("Validation failed with: <b>{0}</b>.", result);
+            stringBuilder.AppendLine();
+            stringBuilder.AppendFormat("Path: <i><b>{0}</b></i>.", resolvedPath);
+            stringBuilder.AppendLine();
+            stringBuilder.AppendFormat("Component: <i><b>{0}</b></i>, Property: <i><b>{1}</b></i>", typeName, path);
 
-            return str;
+            return stringBuilder.ToString();
         }
     }
 }

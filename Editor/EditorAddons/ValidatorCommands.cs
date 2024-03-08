@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Better.Validation.EditorAddons.ContextResolver;
 using Better.Validation.EditorAddons.Iteration;
-using Better.Validation.EditorAddons.Utilities;
+using Better.Validation.EditorAddons.Utility;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -17,11 +16,10 @@ namespace Better.Validation.EditorAddons
         public List<ValidationCommandData> ValidateAttributesInProject()
         {
             var allAssets = AssetDatabase.GetAllAssetPaths();
-            var objs = allAssets.SelectMany(a =>
-                AssetDatabase.LoadAssetAtPath<Object>(a).GetAllChildren().Where(file =>
-                    file is ScriptableObject || file is GameObject)).ToArray();
+            var objects = allAssets.Select(AssetDatabase.LoadAssetAtPath<Object>).Where(obj => obj);
+            var objs = objects.SelectMany(obj => obj.GetAllChildren().Where(file => file is ScriptableObject || file is GameObject)).ToArray();
 
-            Iterator.SetContext(AssetResolver.Instance);
+            Iterator.SetContext(AssetPathResolver.Instance);
             return Iterator.ObjectsIteration(objs, IteratorFilter.PropertyIterationWithAttributes);
         }
 
@@ -29,8 +27,9 @@ namespace Better.Validation.EditorAddons
         {
             var scene = SceneManager.GetActiveScene();
             Iterator.SetContext(SceneResolver.Instance);
-            return Iterator.ObjectsIteration(scene.GetRootGameObjects().SelectMany(x => x.GetAllChildren()).ToList(),
-                IteratorFilter.PropertyIterationWithAttributes);
+
+            var objects = scene.GetRootGameObjects().SelectMany(x => x.GetAllChildren()).ToList();
+            return Iterator.ObjectsIteration(objects, IteratorFilter.PropertyIterationWithAttributes);
         }
 
         public List<ValidationCommandData> ValidateAttributesInAllScenes()
@@ -40,7 +39,9 @@ namespace Better.Validation.EditorAddons
             foreach (var scene in EditorBuildSettings.scenes.Where(s => s.enabled))
             {
                 var sceneReference = EditorSceneManager.OpenScene(scene.path);
-                list.AddRange(Iterator.ObjectsIteration(sceneReference.GetRootGameObjects(), IteratorFilter.PropertyIterationWithAttributes));
+                var objects = sceneReference.GetRootGameObjects();
+
+                list.AddRange(Iterator.ObjectsIteration(objects, IteratorFilter.PropertyIterationWithAttributes));
             }
 
             return list;
@@ -53,7 +54,9 @@ namespace Better.Validation.EditorAddons
             foreach (var scene in EditorBuildSettings.scenes.Where(s => s.enabled))
             {
                 var sceneReference = EditorSceneManager.OpenScene(scene.path);
-                list.AddRange(Iterator.ObjectsIteration(sceneReference.GetRootGameObjects(), IteratorFilter.MissingPropertyIteration));
+                var objects = sceneReference.GetRootGameObjects();
+
+                list.AddRange(Iterator.ObjectsIteration(objects, IteratorFilter.MissingPropertyIteration));
             }
 
             return list;
@@ -68,7 +71,8 @@ namespace Better.Validation.EditorAddons
             var list = new List<ValidationCommandData>();
             for (var i = 0; i < countLoaded; i++)
             {
-                var data = Iterator.ObjectsIteration(SceneManager.GetSceneAt(i).GetRootGameObjects(), IteratorFilter.MissingPropertyIteration);
+                var objects = SceneManager.GetSceneAt(i).GetRootGameObjects();
+                var data = Iterator.ObjectsIteration(objects, IteratorFilter.MissingPropertyIteration);
                 list.AddRange(data);
             }
 
@@ -78,9 +82,10 @@ namespace Better.Validation.EditorAddons
         public List<ValidationCommandData> FindMissingReferencesInProject()
         {
             var allAssets = AssetDatabase.GetAllAssetPaths();
-            var objs = allAssets.Select(a => AssetDatabase.LoadAssetAtPath(a, typeof(GameObject)) as GameObject).Where(a => a != null).ToArray();
+            Iterator.SetContext(AssetPathResolver.Instance);
 
-            Iterator.SetContext(AssetResolver.Instance);
+            var objs = allAssets.Select(a => AssetDatabase.LoadAssetAtPath(a, typeof(GameObject)) as GameObject).Where(obj => obj).ToArray();
+
             return Iterator.ObjectsIteration(objs, IteratorFilter.MissingPropertyIteration);
         }
     }

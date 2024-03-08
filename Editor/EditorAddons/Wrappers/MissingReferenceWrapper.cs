@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Better.Validation.EditorAddons.Wrappers
 {
-    public class NotNullWrapper : PropertyValidationWrapper
+    public class MissingReferenceWrapper : PropertyValidationWrapper
     {
         public override CacheValue<string> Validate()
         {
@@ -16,8 +16,6 @@ namespace Better.Validation.EditorAddons.Wrappers
                 {
                     return GetNotValidCache($"Object in {fieldName} field is missing reference");
                 }
-
-                return GetNotValidCache($"Object in {fieldName} field is null");
             }
             
             return GetClearCache();

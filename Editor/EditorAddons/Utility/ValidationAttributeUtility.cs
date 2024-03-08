@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Better.EditorTools.Comparers;
-using Better.EditorTools.Drawers.Base;
-using Better.EditorTools.Utilities;
+using Better.EditorTools.EditorAddons.Comparers;
+using Better.EditorTools.EditorAddons.Utilities;
+using Better.EditorTools.EditorAddons.WrappersTypeCollection;
 using Better.Validation.EditorAddons.Wrappers;
 using Better.Validation.Runtime.Attributes;
 
-namespace Better.Validation.EditorAddons.Utilities
+namespace Better.Validation.EditorAddons.Utility
 {
-    public class ValidationUtility : BaseUtility<ValidationUtility>
+    public class ValidationAttributeUtility : BaseUtility<ValidationAttributeUtility>
     {
         protected override BaseWrappersTypeCollection GenerateCollection()
         {

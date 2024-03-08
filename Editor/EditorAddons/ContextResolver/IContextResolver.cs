@@ -2,7 +2,7 @@
 
 namespace Better.Validation.EditorAddons.ContextResolver
 {
-    public interface IContextResolver
+    public interface IPathResolver
     {
         public string Resolve(Object obj);
     }

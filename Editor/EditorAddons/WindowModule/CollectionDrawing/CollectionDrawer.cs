@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Better.EditorTools.Helpers;
-using Better.Validation.EditorAddons.Utilities;
+using Better.EditorTools.EditorAddons.Helpers;
+using Better.Validation.EditorAddons.Utility;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,6 +8,7 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
     public abstract class CollectionDrawer
     {
+        private const string ScriptIconName = "cs Script Icon";
         protected ValidationCommandData _currentItem = null;
         public abstract int Count { get; }
         
@@ -64,21 +65,21 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
             {
                 var reference = data.Target;
 
-                var csIcon = EditorGUIUtility.IconContent("cs Script Icon");
+                var csIcon = EditorGUIUtility.IconContent(ScriptIconName);
                 csIcon.text = reference.GetType().Name;
-#if UNITY_2021_2_OR_NEWER
+
                 var icon = EditorGUIUtility.GetIconForObject(reference);
                 if (icon)
                 {
                     csIcon.image = icon;
                 }
-#endif
+                
                 EditorGUILayout.LabelField(csIcon);
                 EditorGUILayout.Space(DrawersHelper.SpaceHeight);
 
                 if (GUILayout.Button("Show"))
                 {
-                    ValidationExtensions.OpenReference(reference);
+                    ValidationUtility.OpenReference(reference);
                     _currentItem = data;
                 }
             }
