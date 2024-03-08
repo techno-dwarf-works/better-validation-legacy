@@ -8,15 +8,15 @@ namespace Better.Validation.EditorAddons.Iteration
     {
         public Object Target { get; private set; }
 
-        public IContextResolver ContextResolver { get; private set; }
+        public IPathResolver PathResolver { get; private set; }
 
         public SerializedProperty Property { get; private set; }
         public SerializedObject Context { get; private set; }
 
 
-        public void SetResolver(IContextResolver context)
+        public void SetResolver(IPathResolver path)
         {
-            ContextResolver = context;
+            PathResolver = path;
         }
 
         public void SetTarget(Object target)

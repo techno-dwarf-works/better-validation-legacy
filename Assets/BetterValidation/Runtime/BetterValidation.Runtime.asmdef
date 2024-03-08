@@ -1,8 +1,9 @@
 {
-    "name": "Better",
+    "name": "BetterValidation.Runtime",
     "rootNamespace": "Better.Validation.Runtime",
     "references": [
-        "GUID:a59e3daedde9ca94bba45364d4ead25f"
+        "GUID:a59e3daedde9ca94bba45364d4ead25f",
+        "GUID:01df13aca8d01e24a911bcc3e8277031"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

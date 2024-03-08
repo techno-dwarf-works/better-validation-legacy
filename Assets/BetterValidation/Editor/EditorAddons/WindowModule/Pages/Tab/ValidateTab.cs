@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.WindowModule.Pages.Tab
+namespace Better.Validation.EditorAddons.WindowModule
 {
     public class ValidateTab : BaseValidationTab
     {

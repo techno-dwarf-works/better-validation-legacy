@@ -13,28 +13,24 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
             return "Type Group";
         }
 
-        public override CollectionDrawer Initialize(List<ValidationCommandData> data)
+        protected override SortedDictionary<ValidationType, MutableTuple<bool, List<ValidationCommandData>>> OnInitialize(List<ValidationCommandData> data)
         {
-            _dataDictionary =
+            var dataDictionary =
                 new SortedDictionary<ValidationType, MutableTuple<bool, List<ValidationCommandData>>>(Comparer<ValidationType>.Create((x, y) => y.CompareTo(x)));
             foreach (var commandData in data)
             {
                 var iconType = commandData.Type;
-                if (!_dataDictionary.TryGetValue(iconType, out var list))
+                if (!dataDictionary.TryGetValue(iconType, out var list))
                 {
-                    list = new MutableTuple<bool, List<ValidationCommandData>>(iconType == ValidationType.Error || commandData == _currentItem,
-                        new List<ValidationCommandData>());
-                    _dataDictionary.Add(iconType, list);
+                    list = new MutableTuple<bool, List<ValidationCommandData>>(iconType == ValidationType.Error || commandData == _currentItem, new List<ValidationCommandData>());
+                    dataDictionary.Add(iconType, list);
                 }
 
                 list.Item2.Add(commandData);
             }
 
-            _count = _dataDictionary.Sum(x => x.Value.Item2.Count);
-            return this;
+            return dataDictionary;
         }
-
-        public override int Count => _count;
 
 
         protected override string FoldoutName(ValidationType key)

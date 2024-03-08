@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Better.EditorTools.Helpers;
-using Better.Validation.EditorAddons.Utilities;
+using Better.EditorTools.EditorAddons.Helpers;
+using Better.Extensions.Runtime;
+using Better.Validation.EditorAddons.Utility;
 using UnityEditor;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
-    public abstract class GroupDictionaryDrawer<TKey, TDictionary> : CollectionDrawer where TDictionary: class, IDictionary<TKey, MutableTuple<bool, List<ValidationCommandData>>>
+    public abstract class GroupDictionaryDrawer<TKey, TDictionary> : CollectionDrawer
+        where TDictionary : class, IDictionary<TKey, MutableTuple<bool, List<ValidationCommandData>>>, new()
     {
-        protected TDictionary _dataDictionary = null;
-        protected int _count;
+        private TDictionary _dataDictionary = null;
+        private int _count;
 
         public override int Count => _count;
 
@@ -23,6 +25,24 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
             return GetAtDirection(-1);
         }
 
+        public override CollectionDrawer Initialize(List<ValidationCommandData> data)
+        {
+            if (data.IsNullOrEmpty())
+            {
+                _dataDictionary = new TDictionary();
+                _count = 0;
+            }
+            else
+            {
+                _dataDictionary = OnInitialize(data);
+                _count = _dataDictionary.Sum(x => x.Value.Item2.Count);
+            }
+
+            return this;
+        }
+
+        protected abstract TDictionary OnInitialize(List<ValidationCommandData> data);
+
         protected abstract string FoldoutName(TKey key);
 
         public override void DrawCollection()
@@ -34,6 +54,7 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
                 {
                     value.Item1 = value.Item2.Contains(_currentItem);
                 }
+
                 using (var groupScope = new FoldoutHeaderGroupScope(value.Item1, FoldoutName(keyValue.Key)))
                 {
                     if (groupScope.IsFolded)
@@ -72,7 +93,7 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 
             return _currentItem;
         }
-        
+
         public override void ClearResolved()
         {
             foreach (var keyValue in _dataDictionary.Values)
@@ -98,7 +119,7 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
                 }
             }
         }
-        
+
         public override bool IsValid()
         {
             return _dataDictionary != null;
@@ -106,6 +127,11 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 
         protected override List<ValidationCommandData> GetRemaining()
         {
+            if (!IsValid())
+            {
+                return new List<ValidationCommandData>();
+            }
+            
             return _dataDictionary.Values.SelectMany(x => x.Item2).ToList();
         }
     }

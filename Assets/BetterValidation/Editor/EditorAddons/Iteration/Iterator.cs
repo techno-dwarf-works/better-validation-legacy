@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Better.Extensions.Runtime;
 using Better.Validation.EditorAddons.ContextResolver;
-using Better.Validation.EditorAddons.Utilities;
+using Better.Validation.EditorAddons.Utility;
 using Better.Validation.EditorAddons.Wrappers;
 using UnityEditor;
 using UnityEngine;
@@ -9,21 +10,26 @@ namespace Better.Validation.EditorAddons.Iteration
 {
     public static class Iterator
     {
-        private static IContextResolver _context;
+        private static IPathResolver _path;
         private static readonly IterationData CacheData = new IterationData();
 
         public delegate IEnumerable<ValidationCommandData> OnPropertyIteration(IterationData commandData);
 
-        public static void SetContext(IContextResolver context)
+        public static void SetContext(IPathResolver path)
         {
-            _context = context;
-            CacheData.SetResolver(context);
+            _path = path;
+            CacheData.SetResolver(path);
         }
 
-        public static List<ValidationCommandData> ObjectIteration(Object go, OnPropertyIteration onPropertyIteration)
+        public static List<ValidationCommandData> ObjectIteration(Object reference, OnPropertyIteration onPropertyIteration)
         {
-            var gameObject = go as GameObject;
-            var components = gameObject ? gameObject.GetComponents<Component>() : new[] { go };
+            if (reference.IsNullOrDestroyed())
+            {
+                return new List<ValidationCommandData>();
+            }
+
+            var gameObject = reference as GameObject;
+            var components = gameObject ? gameObject.GetComponents<Component>() : new[] { reference };
 
             var commandData = new List<ValidationCommandData>();
             EditorUtility.DisplayProgressBar("Validating components...", "", 0);
@@ -32,9 +38,9 @@ namespace Better.Validation.EditorAddons.Iteration
                 var obj = components[index];
                 if (!obj)
                 {
-                    CacheData.SetTarget(go);
+                    CacheData.SetTarget(reference);
                     var missingReference = new ValidationCommandData(CacheData, new MissingComponentWrapper(gameObject));
-                    missingReference.SetResultCompiler((data, result) => $"Missing Component on GameObject: {_context.Resolve(data.Target)}");
+                    missingReference.SetResultCompiler((data, result) => $"Missing Component on GameObject: {_path.Resolve(data.Target)}");
                     missingReference.Revalidate();
                     commandData.Add(missingReference);
                     continue;
@@ -86,7 +92,5 @@ namespace Better.Validation.EditorAddons.Iteration
             EditorUtility.ClearProgressBar();
             return list;
         }
-        
-        
     }
 }

@@ -1,10 +1,10 @@
 using System.Reflection;
-using Better.EditorTools.Attributes;
-using Better.EditorTools.Drawers.Base;
-using Better.EditorTools.Helpers;
-using Better.EditorTools.Helpers.Caching;
-using Better.Tools.Runtime.Attributes;
-using Better.Validation.EditorAddons.Utilities;
+using Better.EditorTools.EditorAddons.Attributes;
+using Better.EditorTools.EditorAddons.Drawers.Base;
+using Better.EditorTools.EditorAddons.Helpers;
+using Better.EditorTools.EditorAddons.Helpers.Caching;
+using Better.EditorTools.Runtime.Attributes;
+using Better.Validation.EditorAddons.Utility;
 using Better.Validation.EditorAddons.Wrappers;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
@@ -15,7 +15,7 @@ namespace Better.Validation.EditorAddons.Drawers
     [MultiCustomPropertyDrawer(typeof(ValidationAttribute))]
     public class ValidationDrawer : MultiFieldDrawer<PropertyValidationWrapper>
     {
-        private Cache<MutableTuple<string, ValidationType>> _validationResult = new Cache<MutableTuple<string, ValidationType>>();
+        private CacheValue<MutableTuple<string, ValidationType>> _validationResult = new CacheValue<MutableTuple<string, ValidationType>>();
         
         public ValidationDrawer(FieldInfo fieldInfo, MultiPropertyAttribute attribute) : base(fieldInfo, attribute)
         {
@@ -23,7 +23,7 @@ namespace Better.Validation.EditorAddons.Drawers
         
         protected override bool PreDraw(ref Rect position, SerializedProperty property, GUIContent label)
         {
-            var cache = ValidateCachedProperties(property, ValidationUtility.Instance);
+            var cache = ValidateCachedProperties(property, ValidationAttributeUtility.Instance);
             var validationWrapper = cache.Value;
             var wrapper = validationWrapper.Wrapper;
             if (!cache.IsValid)

@@ -1,12 +1,12 @@
-﻿using Better.EditorTools.Helpers;
-using Better.EditorTools.Helpers.Caching;
+﻿using Better.EditorTools.EditorAddons.Helpers;
+using Better.EditorTools.EditorAddons.Helpers.Caching;
 using UnityEditor;
 
 namespace Better.Validation.EditorAddons.Wrappers
 {
     public class PrefabWrapper : NotNullWrapper
     {
-        public override Cache<string> Validate()
+        public override CacheValue<string> Validate()
         {
             var baseResult = base.Validate();
             if (!baseResult.IsValid)
