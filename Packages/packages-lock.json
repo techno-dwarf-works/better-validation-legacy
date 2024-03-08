@@ -1,12 +1,38 @@
 {
   "dependencies": {
-    "com.unity.collab-proxy": {
-      "version": "1.17.7",
+    "com.tdw.better.internal.core": {
+      "version": "0.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.tdw.better.projectsettings": {
+      "version": "0.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.services.core": "1.0.1"
+        "com.tdw.better.singletons": "0.0.7",
+        "com.uurha.betterextensions": "1.5.3",
+        "com.tdw.better.internal.core": "0.0.2"
       },
+      "url": "https://package.openupm.com"
+    },
+    "com.tdw.better.singletons": {
+      "version": "0.0.7",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.uurha.betterextensions": "1.5.2",
+        "com.tdw.better.internal.core": "0.0.2"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.unity.collab-proxy": {
+      "version": "2.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.editorcoroutines": {
@@ -28,17 +54,17 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.ide.visualstudio": "2.0.16",
-        "com.unity.ide.rider": "3.0.16",
+        "com.unity.ide.visualstudio": "2.0.17",
+        "com.unity.ide.rider": "3.0.18",
         "com.unity.ide.vscode": "1.2.5",
         "com.unity.editorcoroutines": "1.0.0",
-        "com.unity.performance.profile-analyzer": "1.1.1",
+        "com.unity.performance.profile-analyzer": "1.2.2",
         "com.unity.test-framework": "1.1.31",
         "com.unity.testtools.codecoverage": "1.2.2"
       }
     },
     "com.unity.ide.rider": {
-      "version": "3.0.16",
+      "version": "3.0.18",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -47,7 +73,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.16",
+      "version": "2.0.17",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -71,29 +97,11 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.nuget.newtonsoft-json": {
-      "version": "3.0.2",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
     "com.unity.performance.profile-analyzer": {
-      "version": "1.1.1",
+      "version": "1.2.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.services.core": {
-      "version": "1.6.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.modules.androidjni": "1.0.0"
-      },
       "url": "https://packages.unity.com"
     },
     "com.unity.settings-manager": {
@@ -155,7 +163,7 @@
       }
     },
     "com.unity.visualscripting": {
-      "version": "1.7.8",
+      "version": "1.8.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -165,27 +173,32 @@
       "url": "https://packages.unity.com"
     },
     "com.uurha.betterdatastructures": {
-      "version": "0.1.2",
+      "version": "0.1.7",
       "depth": 1,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.tdw.better.internal.core": "0.0.2"
+      },
       "url": "https://package.openupm.com"
     },
     "com.uurha.bettereditortools": {
-      "version": "1.0.69",
+      "version": "1.5.23",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.uurha.betterdatastructures": "0.1.2",
-        "com.uurha.betterextensions": "1.1.98"
+        "com.uurha.betterdatastructures": "0.1.7",
+        "com.uurha.betterextensions": "1.5.94",
+        "com.tdw.better.internal.core": "0.0.2"
       },
       "url": "https://package.openupm.com"
     },
     "com.uurha.betterextensions": {
-      "version": "1.1.98",
+      "version": "1.5.94",
       "depth": 1,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.tdw.better.internal.core": "0.0.2"
+      },
       "url": "https://package.openupm.com"
     },
     "com.unity.modules.ai": {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Better.Validation.EditorAddons.WindowModule.Pages
+﻿namespace Better.Validation.EditorAddons.WindowModule
 {
     public interface IWindowPage
     {

@@ -1,6 +1,6 @@
 ﻿using System;
-using Better.EditorTools.Helpers;
-using Better.EditorTools.Helpers.Caching;
+using Better.EditorTools.EditorAddons.Helpers;
+using Better.EditorTools.EditorAddons.Helpers.Caching;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
 using UnityEngine;
@@ -17,7 +17,7 @@ namespace Better.Validation.EditorAddons.Wrappers
             _attributeData = (FindAttribute)attribute;
         }
 
-        public override Cache<string> Validate()
+        public override CacheValue<string> Validate()
         {
             var obj = Property.objectReferenceValue;
             if (_attributeData.ValidateIfFieldEmpty)
@@ -32,6 +32,7 @@ namespace Better.Validation.EditorAddons.Wrappers
             var targetObject = propertySerializedObject.targetObject;
             var gameObject = ((Component)targetObject)?.gameObject;
             if (gameObject)
+            {
                 switch (_attributeData.RequireDirection)
                 {
                     case RequireDirection.Parent:
@@ -46,6 +47,7 @@ namespace Better.Validation.EditorAddons.Wrappers
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+            }
 
             if (!obj)
             {

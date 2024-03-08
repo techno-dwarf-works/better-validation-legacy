@@ -1,27 +1,29 @@
 ﻿using System.Collections.Generic;
-using Better.Tools.Runtime.Settings;
-using Better.Validation.EditorAddons.PreBuildValidation.Interfaces;
-using Better.Validation.EditorAddons.PreBuildValidation.Models;
+using Better.Internal.Core.Runtime;
+using Better.ProjectSettings.Runtime;
+using Better.Singletons.Runtime.Attributes;
+using Better.Validation.EditorAddons.PreBuildValidation;
 using Better.Validation.Runtime.Attributes;
 using UnityEngine;
 
 namespace Better.Validation.EditorAddons.Settings
 {
-    public class ValidationSettings : ProjectSettings
+    [ScriptableCreate(PrefixConstants.BetterPrefix + "/" + nameof(Validation))]
+    public class ValidationSettings : ScriptableSettings<ValidationSettings>
     {
-        [SerializeField] private bool disableBuildValidation;
-        [SerializeField] private ValidationType buildLoggingLevel = ValidationType.Warning;
+        [SerializeField] private bool _disableBuildValidation;
+        [SerializeField] private ValidationType _buildLoggingLevel = ValidationType.Warning;
 
-        [SerializeReference] private IBuildValidationStep[] validationSteps = new IBuildValidationStep[]
+        [SerializeReference] private IBuildValidationStep[] _validationSteps = new IBuildValidationStep[]
             { new ProjectValidationStep(), new AllSceneValidationStep() };
 
-        public ValidationType BuildLoggingLevel => buildLoggingLevel;
+        public ValidationType BuildLoggingLevel => _buildLoggingLevel;
 
-        public bool DisableBuildValidation => disableBuildValidation;
+        public bool DisableBuildValidation => _disableBuildValidation;
 
-        public List<IBuildValidationStep> GetSteps()
+        public IReadOnlyList<IBuildValidationStep> GetSteps()
         {
-            return new List<IBuildValidationStep>(validationSteps);
+            return _validationSteps;
         }
     }
 }

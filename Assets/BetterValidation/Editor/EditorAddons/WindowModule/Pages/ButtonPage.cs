@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Better.EditorTools.Helpers;
+using Better.EditorTools.EditorAddons.Helpers;
 using Better.Extensions.Runtime;
-using Better.Validation.EditorAddons.Utilities;
-using Better.Validation.EditorAddons.WindowModule.Pages.Tab;
+using Better.Validation.EditorAddons.Utility;
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.WindowModule.Pages
+namespace Better.Validation.EditorAddons.WindowModule
 {
     public class ButtonPage : IWindowPage
     {
-        private ValidatorCommands _commands;
         private int _groupID;
 
         private string[] _groupNames;
@@ -23,9 +21,9 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages
 
         public void Initialize()
         {
-            _commands = new ValidatorCommands();
-            _buttons = typeof(IValidationTab).GetAllInheritedType().Select(type => (IValidationTab)Activator.CreateInstance(type)).OrderBy(tab => tab.Order)
-                .ToArray();
+            _buttons = typeof(IValidationTab).GetAllInheritedTypesWithoutUnityObject()
+                .Select(type => (IValidationTab)Activator.CreateInstance(type)).OrderBy(tab => tab.Order).ToArray();
+            
             foreach (var validationButton in _buttons)
             {
                 validationButton.Initialize();
@@ -37,12 +35,16 @@ namespace Better.Validation.EditorAddons.WindowModule.Pages
 
         public IWindowPage DrawUpdate()
         {
+            if (_buttons.Length <= 0) return null;
             List<ValidationCommandData> list = null;
             using (new EditorGUILayout.HorizontalScope())
             {
                 _groupID = ToolsGUIUtility.Sidebar(ref _scrollPosition, _groupID, _groupNames, out var isChanged);
                 if (isChanged)
+                {
                     _currentTab = _buttons[_groupID];
+                }
+                
                 using (new EditorGUILayout.HorizontalScope(Styles.DefaultContentMargins))
                 {
                     list = _currentTab.DrawUpdate();

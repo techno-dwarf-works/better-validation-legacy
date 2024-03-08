@@ -1,13 +1,12 @@
-﻿using Better.Validation.EditorAddons.Utilities;
+﻿using Better.Singletons.Runtime;
+using Better.Validation.EditorAddons.Utility;
 using UnityEditor;
 using UnityEngine;
 
 namespace Better.Validation.EditorAddons.ContextResolver
 {
-    public class AssetResolver : IContextResolver
+    public class AssetPathResolver : PocoSingleton<AssetPathResolver>, IPathResolver
     {
-        public static IContextResolver Instance { get; } = new AssetResolver();
-
         public string Resolve(Object obj)
         {
             if (obj is GameObject gameObject)

@@ -1,4 +1,4 @@
-﻿using Better.EditorTools.Helpers.Caching;
+﻿using Better.EditorTools.EditorAddons.Helpers.Caching;
 using Better.Validation.Runtime.Attributes;
 using UnityEngine;
 
@@ -15,7 +15,7 @@ namespace Better.Validation.EditorAddons.Wrappers
 
         public override ValidationType Type => ValidationType.Error;
 
-        public override Cache<string> Validate()
+        public override CacheValue<string> Validate()
         {
             if (!_target) return GetClearCache();
             if (_target is GameObject gameObject)

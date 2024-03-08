@@ -1,10 +1,10 @@
-﻿using Better.EditorTools.Helpers;
+﻿using Better.EditorTools.EditorAddons.Helpers;
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.Utilities
+namespace Better.Validation.EditorAddons.Utility
 {
-    public static class ToolsGUIUtility
+    internal static class ToolsGUIUtility
     {
         public static readonly GUIStyle SelectionStyle = new GUIStyle("TV Selection")
         {
@@ -42,7 +42,7 @@ namespace Better.Validation.EditorAddons.Utilities
 
         private static void DrawVerticalLineFull(Color color, int thickness = 1, int padding = 10)
         {
-            Rect r = EditorGUILayout.GetControlRect(GUILayout.Width(padding + thickness));
+            var r = EditorGUILayout.GetControlRect(GUILayout.Width(padding + thickness));
             r.width = thickness;
             r.x -= 4;
             r.y -= 2;

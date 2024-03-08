@@ -1,7 +1,4 @@
-﻿using System;
-using Better.EditorTools.Helpers;
-using UnityEditor;
-using UnityEditorInternal;
+﻿using UnityEditor;
 using Object = UnityEngine.Object;
 
 namespace Better.Validation.EditorAddons.Settings
@@ -17,9 +14,9 @@ namespace Better.Validation.EditorAddons.Settings
 
         private void OnEnable()
         {
-            _disableBuildProperty = serializedObject.FindProperty("disableBuildValidation");
-            _logLevelProperty = serializedObject.FindProperty("buildLoggingLevel");
-            _stepsProperty = serializedObject.FindProperty("validationSteps");
+            _disableBuildProperty = serializedObject.FindProperty("_disableBuildValidation");
+            _logLevelProperty = serializedObject.FindProperty("_buildLoggingLevel");
+            _stepsProperty = serializedObject.FindProperty("_validationSteps");
             _drawer = new BuildValidationStepsDrawer(serializedObject, _stepsProperty);
             _target = serializedObject.targetObject;
         }

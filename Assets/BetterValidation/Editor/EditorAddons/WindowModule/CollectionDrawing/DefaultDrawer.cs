@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Better.EditorTools.Helpers;
+using Better.EditorTools.EditorAddons.Helpers;
 using UnityEditor;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing

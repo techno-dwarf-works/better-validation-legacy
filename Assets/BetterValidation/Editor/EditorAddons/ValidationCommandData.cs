@@ -1,7 +1,6 @@
 ﻿using System;
 using Better.Validation.EditorAddons.ContextResolver;
 using Better.Validation.EditorAddons.Iteration;
-using Better.Validation.EditorAddons.Utilities;
 using Better.Validation.EditorAddons.Wrappers;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
@@ -12,7 +11,7 @@ namespace Better.Validation.EditorAddons
     public class ValidationCommandData
     {
         private Func<ValidationCommandData, string, string> _compiler;
-        public IContextResolver ContextResolver { get; private set; }
+        public IPathResolver PathResolver { get; private set; }
         public Object Target { get; private set; }
         public SerializedObject Context { get; }
         public SerializedProperty Property { get; private set; }
@@ -23,7 +22,7 @@ namespace Better.Validation.EditorAddons
 
         public ValidationCommandData(IterationData data, ValidationWrapper wrapper)
         {
-            ContextResolver = data.ContextResolver;
+            PathResolver = data.PathResolver;
             Context = data.Context;
             Property = data.Property;
             Target = data.Target;

@@ -1,5 +1,5 @@
-﻿using Better.EditorTools.Helpers;
-using Better.EditorTools.Helpers.Caching;
+﻿using Better.EditorTools.EditorAddons.Helpers;
+using Better.EditorTools.EditorAddons.Helpers.Caching;
 using Better.Extensions.Runtime;
 using UnityEditor;
 using UnityEngine;
@@ -8,7 +8,7 @@ namespace Better.Validation.EditorAddons.Wrappers
 {
     public class SceneReferenceWrapper : NotNullWrapper
     {
-        public override Cache<string> Validate()
+        public override CacheValue<string> Validate()
         {
             var baseResult = base.Validate();
             if (!baseResult.IsValid)
@@ -23,7 +23,7 @@ namespace Better.Validation.EditorAddons.Wrappers
             return ValidateNotPrefabContext(obj, target);
         }
 
-        private Cache<string> ValidateNotPrefabContext(Object obj, Object target)
+        private CacheValue<string> ValidateNotPrefabContext(Object obj, Object target)
         {
             var isObjectInScene = IsObjectInScene(obj);
             var isTargetInScene = IsObjectInScene(target);
@@ -57,7 +57,7 @@ namespace Better.Validation.EditorAddons.Wrappers
             return false;
         }
 
-        private Cache<string> ValueTuple(Object obj, Object target)
+        private CacheValue<string> ValueTuple(Object obj, Object target)
         {
             var objRoot = GetOutermostPrefabInstanceRoot(obj);
             var targetRoot = GetOutermostPrefabInstanceRoot(target);

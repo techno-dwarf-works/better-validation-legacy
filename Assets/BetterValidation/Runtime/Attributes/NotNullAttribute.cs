@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using Better.Tools.Runtime;
+using Better.Internal.Core.Runtime;
 
 namespace Better.Validation.Runtime.Attributes
 {
-    [Conditional(BetterEditorDefines.Editor)]
+    [Conditional(Defines.Editor)]
     [AttributeUsage(AttributeTargets.Field)]
     public class NotNullAttribute : ValidationAttribute
     {

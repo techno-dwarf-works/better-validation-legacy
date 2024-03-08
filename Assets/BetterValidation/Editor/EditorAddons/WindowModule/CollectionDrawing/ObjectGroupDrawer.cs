@@ -13,22 +13,21 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
             return "Object Group";
         }
 
-        public override CollectionDrawer Initialize(List<ValidationCommandData> data)
+        protected override Dictionary<Object, MutableTuple<bool, List<ValidationCommandData>>> OnInitialize(List<ValidationCommandData> data)
         {
-            _dataDictionary = new Dictionary<Object, MutableTuple<bool, List<ValidationCommandData>>>(GameObjectGroupingComparer.Instance);
+            var dataDictionary = new Dictionary<Object, MutableTuple<bool, List<ValidationCommandData>>>(GameObjectGroupingComparer.Instance);
             foreach (var commandData in data)
             {
-                if (!_dataDictionary.TryGetValue(commandData.Target, out var list))
+                if (!dataDictionary.TryGetValue(commandData.Target, out var list))
                 {
                     list = new MutableTuple<bool, List<ValidationCommandData>>(true, new List<ValidationCommandData>());
-                    _dataDictionary.Add(commandData.Target, list);
+                    dataDictionary.Add(commandData.Target, list);
                 }
 
                 list.Item2.Add(commandData);
             }
 
-            _count = _dataDictionary.Sum(x => x.Value.Item2.Count);
-            return this;
+            return dataDictionary;
         }
 
         protected override string FoldoutName(Object key)
