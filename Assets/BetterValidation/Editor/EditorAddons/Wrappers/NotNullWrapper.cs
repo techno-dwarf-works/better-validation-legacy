@@ -1,6 +1,6 @@
-﻿using Better.EditorTools.EditorAddons.Helpers;
-using Better.EditorTools.EditorAddons.Helpers.Caching;
-using Better.Extensions.Runtime;
+﻿using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Utility;
+using Better.Commons.Runtime.Extensions;
 using UnityEditor;
 
 namespace Better.Validation.EditorAddons.Wrappers
@@ -11,7 +11,7 @@ namespace Better.Validation.EditorAddons.Wrappers
         {
             if (Property.objectReferenceValue.IsNullOrDestroyed())
             {
-                var fieldName = DrawersHelper.BeautifyFormat(Property.displayName);
+                var fieldName = ExtendedGUIUtility.BeautifyFormat(Property.displayName);
                 if (Property.objectReferenceInstanceIDValue != 0)
                 {
                     return GetNotValidCache($"Object in {fieldName} field is missing reference");

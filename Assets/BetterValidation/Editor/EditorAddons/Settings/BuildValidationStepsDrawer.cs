@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Better.EditorTools.EditorAddons.Helpers;
-using Better.EditorTools.EditorAddons.Helpers.DropDown;
-using Better.Extensions.EditorAddons;
-using Better.Extensions.Runtime;
+using Better.Commons.EditorAddons.DropDown;
+using Better.Commons.EditorAddons.Enums;
+using Better.Commons.EditorAddons.Extensions;
+using Better.Commons.EditorAddons.Helpers;
+using Better.Commons.EditorAddons.Utility;
+using Better.Commons.Runtime.Extensions;
 using Better.Validation.EditorAddons.PreBuildValidation;
 using UnityEditor;
 using UnityEditorInternal;
@@ -58,7 +60,7 @@ namespace Better.Validation.EditorAddons.Settings
         private void DrawButton(Rect rect, SerializedProperty serializedProperty, Type currentValue)
         {
             var typeName = currentValue == null ? NullName : currentValue.Name;
-            var content = DrawersHelper.GetIconGUIContent(IconType.GrayDropdown);
+            var content = IconType.GrayDropdown.GetIconGUIContent();
             content.text = typeName;
             var buttonPosition = GetPopupPosition(rect);
             if (GUI.Button(buttonPosition, content, Styles.Button))
@@ -87,7 +89,7 @@ namespace Better.Validation.EditorAddons.Settings
                 var guiContent = new GUIContent(typeName);
                 if (guiContent.image == null && type == currentValue)
                 {
-                    guiContent.image = DrawersHelper.GetIcon(IconType.Checkmark);
+                    guiContent.image = IconType.Checkmark.GetIcon();
                 }
 
                 var item = new DropdownItem(guiContent, OnSelectItem, new Tuple<SerializedProperty, Type>(serializedProperty, type));

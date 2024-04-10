@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Better.EditorTools.EditorAddons.Comparers;
+using Better.Commons.Runtime.Comparers;
 using UnityEngine;
 
 namespace Better.Validation.EditorAddons.WindowModule
