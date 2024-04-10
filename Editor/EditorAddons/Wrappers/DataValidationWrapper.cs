@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
-using Better.EditorTools.EditorAddons.Helpers;
-using Better.EditorTools.EditorAddons.Helpers.Caching;
-using Better.Extensions.EditorAddons;
-using Better.Extensions.Runtime;
+using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Extensions;
+using Better.Commons.EditorAddons.Helpers;
+using Better.Commons.EditorAddons.Utility;
+using Better.Commons.Runtime.Extensions;
 using Better.Internal.Core.Runtime;
 using Better.Validation.Runtime.Attributes;
 
@@ -17,7 +18,7 @@ namespace Better.Validation.EditorAddons.Wrappers
 
             var propertyContainer = Property.GetPropertyContainer();
             var method = propertyContainer.GetType().GetMethod(att.MethodName, Defines.MethodFlags);
-            var methodName = DrawersHelper.BeautifyFormat(att.MethodName);
+            var methodName = ExtendedGUIUtility.BeautifyFormat(att.MethodName);
             if (method == null)
             {
                 return GetNotValidCache($"Method with name {methodName} not found");
@@ -33,7 +34,7 @@ namespace Better.Validation.EditorAddons.Wrappers
             if (parameterInfo.ParameterType != fieldCache.Type)
             {
                 return GetNotValidCache(
-                    $"Method with name {methodName} has parameter of type {DrawersHelper.BeautifyFormat(parameterInfo.ParameterType.Name)}. But used on field of type {DrawersHelper.BeautifyFormat(fieldCache.Type.Name)}");
+                    $"Method with name {methodName} has parameter of type {ExtendedGUIUtility.BeautifyFormat(parameterInfo.ParameterType.Name)}. But used on field of type {ExtendedGUIUtility.BeautifyFormat(fieldCache.Type.Name)}");
             }
 
             if (method.IsStatic)
@@ -59,7 +60,7 @@ namespace Better.Validation.EditorAddons.Wrappers
                 {
                     var name = fieldCache.FieldInfo.FieldType.IsArrayOrList() ? Property.GetArrayPath() : propertyContainer.GetType().Name;
                     return GetNotValidCache(
-                        $"Validation failed of {DrawersHelper.BeautifyFormat(fieldCache.FieldInfo.Name)} in {DrawersHelper.BeautifyFormat(name)}");
+                        $"Validation failed of {ExtendedGUIUtility.BeautifyFormat(fieldCache.FieldInfo.Name)} in {ExtendedGUIUtility.BeautifyFormat(name)}");
                 }
             }
             else if (method.ReturnType == typeof(string))

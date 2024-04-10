@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Better.Internal.Core.Runtime;
 using Better.Validation.EditorAddons.Settings;
 using Better.Validation.EditorAddons.WindowModule;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
-using UnityEngine;
 
 namespace Better.Validation.EditorAddons.PreBuildValidation
 {

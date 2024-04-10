@@ -1,4 +1,4 @@
-﻿using Better.EditorTools.EditorAddons.Helpers;
+﻿using Better.Commons.EditorAddons.Helpers;
 using UnityEditor;
 using UnityEngine;
 

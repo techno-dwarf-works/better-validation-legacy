@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Better.EditorTools.EditorAddons.Helpers;
+using Better.Commons.EditorAddons.Enums;
+using Better.Commons.EditorAddons.Utility;
 using Better.Validation.EditorAddons.Utility;
 using UnityEditor;
 using UnityEngine;
@@ -40,11 +41,11 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 
                 GUI.Box(verticalScore.rect, GUIContent.none, EditorStyles.helpBox);
 
-                EditorGUILayout.Space(DrawersHelper.SpaceHeight);
+                EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
 
                 DrawLabel(data);
 
-                EditorGUILayout.Space(DrawersHelper.SpaceHeight);
+                EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
                 var iconType = data.Type.GetIconType();
                 if (data.IsValid)
                 {
@@ -52,8 +53,8 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
                     iconType = IconType.Checkmark;
                 }
 
-                DrawersHelper.HelpBox(data.Result, iconType, false);
-                EditorGUILayout.Space(DrawersHelper.SpaceHeight);
+                ExtendedGUIUtility.HelpBox(data.Result, iconType, false);
+                EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
             }
 
             GUI.backgroundColor = bufferColor;
@@ -75,7 +76,7 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
                 }
                 
                 EditorGUILayout.LabelField(csIcon);
-                EditorGUILayout.Space(DrawersHelper.SpaceHeight);
+                EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
 
                 if (GUILayout.Button("Show"))
                 {

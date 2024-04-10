@@ -1,6 +1,6 @@
-﻿using Better.EditorTools.EditorAddons.Helpers;
-using Better.EditorTools.EditorAddons.Helpers.Caching;
-using Better.Extensions.Runtime;
+﻿using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Utility;
+using Better.Commons.Runtime.Extensions;
 using UnityEditor;
 using UnityEngine;
 
@@ -30,7 +30,7 @@ namespace Better.Validation.EditorAddons.Wrappers
 
             if (isTargetInScene && !isObjectInScene)
             {
-                var str = DrawersHelper.BeautifyFormat(Property.displayName);
+                var str = ExtendedGUIUtility.BeautifyFormat(Property.displayName);
                 return GetNotValidCache($"Object in {str} field is not scene object");
             }
 
@@ -65,7 +65,7 @@ namespace Better.Validation.EditorAddons.Wrappers
             if (!equals)
             {
                 return GetNotValidCache(
-                    $"Object in {DrawersHelper.BeautifyFormat(Property.displayName)} field is not part of {DrawersHelper.BeautifyFormat(target.name)} prefab");
+                    $"Object in {ExtendedGUIUtility.BeautifyFormat(Property.displayName)} field is not part of {ExtendedGUIUtility.BeautifyFormat(target.name)} prefab");
             }
 
             return GetClearCache();

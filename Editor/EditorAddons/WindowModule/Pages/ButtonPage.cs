@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Better.EditorTools.EditorAddons.Helpers;
-using Better.Extensions.Runtime;
+using Better.Commons.EditorAddons.Helpers;
+using Better.Commons.Runtime.Extensions;
 using Better.Validation.EditorAddons.Utility;
 using UnityEditor;
 using UnityEngine;

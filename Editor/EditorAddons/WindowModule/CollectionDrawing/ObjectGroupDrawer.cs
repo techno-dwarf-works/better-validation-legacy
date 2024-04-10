@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Object = UnityEngine.Object;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Better.EditorTools.EditorAddons.Helpers;
-using Better.Extensions.Runtime;
+using Better.Commons.EditorAddons.Utility;
+using Better.Commons.Runtime.Extensions;
 using Better.Validation.EditorAddons.Utility;
 using Better.Validation.EditorAddons.WindowModule.CollectionDrawing;
 using UnityEditor;
@@ -112,7 +112,7 @@ namespace Better.Validation.EditorAddons.WindowModule
         private static GUIStyle GetScrollStyle()
         {
             var style = new GUIStyle();
-            var space = (int)DrawersHelper.SpaceHeight;
+            var space = (int)ExtendedGUIUtility.SpaceHeight;
             style.margin = new RectOffset(space, space, space, space);
             return style;
         }

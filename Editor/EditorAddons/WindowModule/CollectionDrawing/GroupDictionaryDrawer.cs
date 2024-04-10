@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Better.EditorTools.EditorAddons.Helpers;
-using Better.Extensions.Runtime;
+using Better.Commons.EditorAddons.Utility;
+using Better.Commons.Runtime.Extensions;
 using Better.Validation.EditorAddons.Utility;
 using UnityEditor;
 
@@ -62,7 +62,7 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
                         foreach (var validationCommandData in value.Item2)
                         {
                             DrawBox(validationCommandData);
-                            EditorGUILayout.Space(DrawersHelper.SpaceHeight);
+                            EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
                         }
                     }
 

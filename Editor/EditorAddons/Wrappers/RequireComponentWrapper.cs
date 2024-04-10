@@ -1,6 +1,6 @@
 ﻿using System;
-using Better.EditorTools.EditorAddons.Helpers;
-using Better.EditorTools.EditorAddons.Helpers.Caching;
+using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Utility;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
 using UnityEngine;
@@ -51,7 +51,7 @@ namespace Better.Validation.EditorAddons.Wrappers
 
             if (!obj)
             {
-                return GetNotValidCache($"Reference of {DrawersHelper.BeautifyFormat(_attributeData.RequiredType.Name)} not found");
+                return GetNotValidCache($"Reference of {ExtendedGUIUtility.BeautifyFormat(_attributeData.RequiredType.Name)} not found");
             }
 
             EditorUtility.SetDirty(targetObject);
