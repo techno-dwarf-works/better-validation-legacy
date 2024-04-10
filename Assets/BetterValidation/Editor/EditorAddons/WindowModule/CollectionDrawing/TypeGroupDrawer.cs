@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Better.Validation.Runtime.Attributes;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing

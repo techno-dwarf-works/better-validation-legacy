@@ -1,5 +1,5 @@
 ﻿using System;
-using Better.EditorTools.EditorAddons.Helpers;
+using Better.Commons.EditorAddons.Enums;
 using Better.Validation.Runtime.Attributes;
 
 

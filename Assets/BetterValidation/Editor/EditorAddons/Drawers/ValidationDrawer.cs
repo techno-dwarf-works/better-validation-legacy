@@ -1,9 +1,9 @@
 using System.Reflection;
-using Better.EditorTools.EditorAddons.Attributes;
-using Better.EditorTools.EditorAddons.Drawers.Base;
-using Better.EditorTools.EditorAddons.Helpers;
-using Better.EditorTools.EditorAddons.Helpers.Caching;
-using Better.EditorTools.Runtime.Attributes;
+using Better.Commons.EditorAddons.Drawers.Attributes;
+using Better.Commons.EditorAddons.Drawers.Base;
+using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Utility;
+using Better.Commons.Runtime.Drawers.Attributes;
 using Better.Validation.EditorAddons.Utility;
 using Better.Validation.EditorAddons.Wrappers;
 using Better.Validation.Runtime.Attributes;
@@ -55,7 +55,7 @@ namespace Better.Validation.EditorAddons.Drawers
             if (!_validationResult.IsValid)
             {
                 var (value, type) = _validationResult.Value;
-                DrawersHelper.HelpBox(value, type.GetIconType());
+                ExtendedGUIUtility.HelpBox(value, type.GetIconType());
             }
         }
 

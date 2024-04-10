@@ -1,5 +1,5 @@
-using Better.EditorTools.EditorAddons.Helpers.Caching;
-using Better.EditorTools.EditorAddons.Utilities;
+using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Drawers.Utility;
 using Better.Validation.Runtime.Attributes;
 
 namespace Better.Validation.EditorAddons.Wrappers

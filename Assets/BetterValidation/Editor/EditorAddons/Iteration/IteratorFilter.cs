@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using Better.EditorTools.EditorAddons.Drawers.Base;
-using Better.EditorTools.EditorAddons.Helpers.Caching;
-using Better.Extensions.EditorAddons;
-using Better.Extensions.Runtime;
+using Better.Commons.EditorAddons.Drawers.Base;
+using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Extensions;
+using Better.Commons.Runtime.Extensions;
 using Better.Validation.EditorAddons.Utility;
 using Better.Validation.EditorAddons.Wrappers;
 using Better.Validation.Runtime.Attributes;

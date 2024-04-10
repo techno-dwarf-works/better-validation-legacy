@@ -1,5 +1,5 @@
-﻿using Better.EditorTools.EditorAddons.Helpers;
-using Better.EditorTools.EditorAddons.Helpers.Caching;
+﻿using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Utility;
 using UnityEditor;
 
 namespace Better.Validation.EditorAddons.Wrappers
@@ -17,7 +17,7 @@ namespace Better.Validation.EditorAddons.Wrappers
             var obj = Property.objectReferenceValue;
             if (!PrefabUtility.IsPartOfPrefabAsset(obj))
             {
-                var str = DrawersHelper.BeautifyFormat(Property.displayName);
+                var str = ExtendedGUIUtility.BeautifyFormat(Property.displayName);
                 if (!PrefabUtility.IsPartOfNonAssetPrefabInstance(obj))
                 {
                     return GetNotValidCache($"Object in {str} field is not prefab");
