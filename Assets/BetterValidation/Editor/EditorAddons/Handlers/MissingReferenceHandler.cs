@@ -12,11 +12,11 @@ namespace Better.Validation.EditorAddons.Handlers
                 var fieldName = $"\"{Property.displayName.FormatBoldItalic()}\"";
                 if (Property.objectReferenceInstanceIDValue != 0)
                 {
-                    return GetNotValidCache($"Object in {fieldName} field is missing reference");
+                    return GetNotValidValue($"Object in {fieldName} field is missing reference");
                 }
             }
             
-            return GetClearCache();
+            return GetClearValue();
         }
 
         public override bool IsSupported()

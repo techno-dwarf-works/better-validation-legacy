@@ -1,6 +1,7 @@
 ﻿using System;
+using Better.Validation.EditorAddons.Handlers;
 
-namespace Better.Validation.EditorAddons.Handlers
+namespace Better.Validation.EditorAddons.Extensions
 {
     public static class ValidationWrapperExtensions
     {

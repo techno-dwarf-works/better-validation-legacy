@@ -19,13 +19,13 @@ namespace Better.Validation.EditorAddons.Handlers
                 var str = $"\"{Property.displayName.FormatBoldItalic()}\"";
                 if (!PrefabUtility.IsPartOfNonAssetPrefabInstance(obj))
                 {
-                    return GetNotValidCache($"Object in {str} field is not prefab");
+                    return GetNotValidValue($"Object in {str} field is not prefab");
                 }
 
-                return GetNotValidCache($"Object in {str} field is prefab instance in scene");
+                return GetNotValidValue($"Object in {str} field is prefab instance in scene");
             }
 
-            return GetClearCache();
+            return GetClearValue();
         }
     }
 }

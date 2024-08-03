@@ -20,6 +20,8 @@ namespace Better.Validation.EditorAddons.Utility
                 { typeof(SceneReferenceAttribute), typeof(SceneReferenceHandler) },
                 { typeof(FindAttribute), typeof(FindComponentHandler) },
                 { typeof(DataValidationAttribute), typeof(DataValidationHandler) },
+                { typeof(MaxAttribute), typeof(MaxWrapper) },
+                { typeof(ClampAttribute), typeof(ClampWrapper) },
             };
         }
 

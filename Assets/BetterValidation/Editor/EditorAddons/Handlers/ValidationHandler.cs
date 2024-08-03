@@ -13,13 +13,13 @@ namespace Better.Validation.EditorAddons.Handlers
 
         public abstract bool IsSupported();
 
-        public static ValidationValue<string> GetNotValidCache(string value)
+        public static ValidationValue<string> GetNotValidValue(string value)
         {
             ValidationValue.Set(false, value);
             return ValidationValue;
         }
 
-        public static ValidationValue<string> GetClearCache()
+        public static ValidationValue<string> GetClearValue()
         {
             ValidationValue.Set(true, string.Empty);
             return ValidationValue;

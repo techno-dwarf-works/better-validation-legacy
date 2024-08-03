@@ -29,7 +29,7 @@ namespace Better.Validation.EditorAddons.Handlers
             if (isTargetInScene && !isObjectInScene)
             {
                 var str = $"\"{Property.displayName.FormatBoldItalic()}\"";;
-                return GetNotValidCache($"Object in {str} field is not scene object");
+                return GetNotValidValue($"Object in {str} field is not scene object");
             }
 
             if (!isTargetInScene)
@@ -37,7 +37,7 @@ namespace Better.Validation.EditorAddons.Handlers
                 return ValueTuple(obj, target);
             }
 
-            return GetClearCache();
+            return GetClearValue();
         }
 
         private bool IsObjectInScene(Object obj)
@@ -62,11 +62,11 @@ namespace Better.Validation.EditorAddons.Handlers
             var equals = objRoot == targetRoot;
             if (!equals)
             {
-                return GetNotValidCache(
+                return GetNotValidValue(
                     $"Object in \"{Property.displayName.FormatBoldItalic()}\" field is not part of \"{target.name.FormatBoldItalic()}\" prefab");
             }
 
-            return GetClearCache();
+            return GetClearValue();
         }
 
         private static Object GetOutermostPrefabInstanceRoot(Object obj)

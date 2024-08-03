@@ -22,7 +22,7 @@ namespace Better.Validation.EditorAddons.Handlers
             {
                 if (obj)
                 {
-                    return GetClearCache();
+                    return GetClearValue();
                 }
             }
 
@@ -50,13 +50,13 @@ namespace Better.Validation.EditorAddons.Handlers
 
             if (!obj)
             {
-                return GetNotValidCache($"Reference of \"{requiredType.Name.FormatBoldItalic()}\" not found");
+                return GetNotValidValue($"Reference of \"{requiredType.Name.FormatBoldItalic()}\" not found");
             }
 
             EditorUtility.SetDirty(targetObject);
             Property.objectReferenceValue = obj;
             propertySerializedObject.ApplyModifiedProperties();
-            return GetClearCache();
+            return GetClearValue();
         }
         
         protected Type GetFieldOrElementType()

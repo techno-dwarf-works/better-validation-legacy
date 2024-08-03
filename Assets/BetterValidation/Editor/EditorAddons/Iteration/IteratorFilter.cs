@@ -5,6 +5,7 @@ using Better.Commons.EditorAddons.Drawers;
 using Better.Commons.EditorAddons.Drawers.Handlers;
 using Better.Commons.EditorAddons.Extensions;
 using Better.Commons.Runtime.Extensions;
+using Better.Validation.EditorAddons.Extensions;
 using Better.Validation.EditorAddons.Handlers;
 using Better.Validation.Runtime.Attributes;
 
@@ -37,7 +38,7 @@ namespace Better.Validation.EditorAddons.Iteration
 
                 propertyHandler.Setup(data.Property, fieldInfo.FieldInfo, validationAttribute);
 
-                var result = handler.IsSupported() ? handler.Validate() : ValidationHandler.GetClearCache();
+                var result = handler.IsSupported() ? handler.Validate() : ValidationHandler.GetClearValue();
 
                 if (result.State) continue;
 

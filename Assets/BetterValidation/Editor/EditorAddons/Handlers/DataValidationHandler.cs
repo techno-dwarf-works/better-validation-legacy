@@ -32,13 +32,13 @@ namespace Better.Validation.EditorAddons.Handlers
             var methodName = $"\"{att.MethodName.FormatBoldItalic()}\"";
             if (method == null)
             {
-                return GetNotValidCache($"Method with name {methodName} not found");
+                return GetNotValidValue($"Method with name {methodName} not found");
             }
 
             var parameters = method.GetParameters();
             if (parameters.Length > 1)
             {
-                return GetNotValidCache($"Method with name {methodName} has {parameters.Length}. It's not supported");
+                return GetNotValidValue($"Method with name {methodName} has {parameters.Length}. It's not supported");
             }
 
             var parameterInfo = parameters[0];
@@ -46,7 +46,7 @@ namespace Better.Validation.EditorAddons.Handlers
             var fieldCacheType = fieldCache.Type;
             if (parameterType != fieldCacheType)
             {
-                return GetNotValidCache(
+                return GetNotValidValue(
                     $"Method with name {methodName} has parameter of type \"{parameterType.Name.FormatBoldItalic()}\". But used on field of type \"{fieldCacheType.Name.FormatBoldItalic()}\"");
             }
 
@@ -73,7 +73,7 @@ namespace Better.Validation.EditorAddons.Handlers
                 {
                     var fieldInfo = fieldCache.FieldInfo;
                     var name = fieldInfo.FieldType.IsArrayOrList() ? Property.GetArrayPath() : propertyContainer.GetType().Name;
-                    return GetNotValidCache(
+                    return GetNotValidValue(
                         $"Validation failed of \"{fieldInfo.Name.FormatBoldItalic()}\" in \"{name.FormatBoldItalic()}\"");
                 }
             }
@@ -82,11 +82,11 @@ namespace Better.Validation.EditorAddons.Handlers
                 var result = (string)method.Invoke(propertyContainer, parameters);
                 if (!string.IsNullOrEmpty(result))
                 {
-                    return GetNotValidCache(result);
+                    return GetNotValidValue(result);
                 }
             }
 
-            return GetClearCache();
+            return GetClearValue();
         }
 
         public override bool IsSupported()
