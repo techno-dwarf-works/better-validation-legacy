@@ -63,7 +63,7 @@ namespace Better.Validation.EditorAddons.PreBuildValidation
             str.AppendLine("Do you want to ignore those issues?");
             str.AppendLine();
             str.AppendLine();
-            str.AppendFormat("(You can disable validation in Edit > Project Settings > {0})", ValidationSettingProvider.Path.Replace("/", " > "));
+            str.AppendFormat("(You can disable validation in Edit > Project Settings > {0})", ValidationSettingsProvider.Path.Replace("/", " > "));
             return str;
         }
     }

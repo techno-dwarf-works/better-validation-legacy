@@ -1,48 +1,56 @@
-﻿using UnityEditor;
+﻿using Better.Commons.EditorAddons.CustomEditors.Attributes;
+using Better.Commons.EditorAddons.CustomEditors.Base;
+using Better.Commons.EditorAddons.Utility;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 namespace Better.Validation.EditorAddons.Settings
 {
-    [CustomEditor(typeof(ValidationSettings))]
-    public class ValidationSettingsEditor : Editor
+    //TODO: fix 'Better.Validation.EditorAddons.Settings.ValidationSettingsEditor' is missing the class attribute 'ExtensionOfNativeClass'!
+    [MultiEditor(typeof(ValidationSettings), OverrideDefaultEditor = true)]
+    public class ValidationSettingsEditor : ExtendedEditor
     {
         private SerializedProperty _disableBuildProperty;
         private SerializedProperty _logLevelProperty;
-        private BuildValidationStepsDrawer _drawer;
         private SerializedProperty _stepsProperty;
-        private Object _target;
+        
+        private ValidationStepsList _list;
 
-        private void OnEnable()
+        public ValidationSettingsEditor(Object target, SerializedObject serializedObject) : base(target, serializedObject)
         {
             _disableBuildProperty = serializedObject.FindProperty("_disableBuildValidation");
             _logLevelProperty = serializedObject.FindProperty("_buildLoggingLevel");
             _stepsProperty = serializedObject.FindProperty("_validationSteps");
-            _drawer = new BuildValidationStepsDrawer(serializedObject, _stepsProperty);
-            _target = serializedObject.targetObject;
         }
 
-        public override bool RequiresConstantRepaint()
+        public override void OnEnable()
         {
-            return EditorUtility.IsDirty(_target);
         }
 
-        public override void OnInspectorGUI()
+        public override VisualElement CreateInspectorGUI()
         {
-            using(var scope = new EditorGUI.ChangeCheckScope())
-            {
-                if(EditorUtility.IsDirty(_target))
-                {
-                    serializedObject.Update();
-                    serializedObject.ApplyModifiedProperties();
-                }
-                EditorGUILayout.PropertyField(_disableBuildProperty);
-                EditorGUILayout.PropertyField(_logLevelProperty);
-                _drawer.DoLayoutList();
-                if (scope.changed)
-                {
-                    EditorUtility.SetDirty(_target);
-                }
-            }
+            var container = VisualElementUtility.CreateVerticalGroup();
+            var disableBuildProperty = new PropertyField(_disableBuildProperty);
+            container.Add(disableBuildProperty);
+
+            var logLevelProperty = new PropertyField(_logLevelProperty);
+            container.Add(logLevelProperty);
+
+            var listView = new ValidationStepsList(_stepsProperty);
+            container.Add(listView);
+            return container;
+        }
+
+        public override void OnDisable()
+        {
+        }
+
+        public override void OnChanged(SerializedObject serializedObject)
+        {
+            serializedObject.Update();
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

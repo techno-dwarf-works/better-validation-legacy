@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Better.Commons.EditorAddons.Utility;
 using Better.Commons.Runtime.Extensions;
-using Better.Validation.EditorAddons.Utility;
-using UnityEditor;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
     public abstract class GroupDictionaryDrawer<TKey, TDictionary> : CollectionDrawer
-        where TDictionary : class, IDictionary<TKey, MutableTuple<bool, List<ValidationCommandData>>>, new()
+        where TDictionary : class, IDictionary<TKey, List<ValidationCommandData>>, new()
     {
         private TDictionary _dataDictionary = null;
         private int _count;
@@ -30,14 +27,16 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
             if (data.IsNullOrEmpty())
             {
                 _dataDictionary = new TDictionary();
-                _count = 0;
+                _count = _dataDictionary.Count;
             }
             else
             {
                 _dataDictionary = OnInitialize(data);
-                _count = _dataDictionary.Sum(x => x.Value.Item2.Count);
+                _count = _dataDictionary.Sum(x => x.Value.Count);
             }
 
+            CreateDataBoxes();
+            name = GetOptionName();
             return this;
         }
 
@@ -45,29 +44,23 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 
         protected abstract string FoldoutName(TKey key);
 
-        public override void DrawCollection()
+        public void CreateDataBoxes()
         {
-            foreach (var keyValue in _dataDictionary)
+            foreach (var (key, value) in _dataDictionary)
             {
-                var value = keyValue.Value;
-                if (!value.Item1)
+                var foldoutGroup = new DataFoldout(value);
+                foldoutGroup.name = FoldoutName(key);
+                foldoutGroup.UpdateStyle(_currentItem);
+
+                CurrentUpdated += foldoutGroup.UpdateStyle;
+                
+                foreach (var validationCommandData in value)
                 {
-                    value.Item1 = value.Item2.Contains(_currentItem);
+                    var dataBox = CreateBox(validationCommandData);
+                    foldoutGroup.Add(dataBox);
                 }
 
-                using (var groupScope = new FoldoutHeaderGroupScope(value.Item1, FoldoutName(keyValue.Key)))
-                {
-                    if (groupScope.IsFolded)
-                    {
-                        foreach (var validationCommandData in value.Item2)
-                        {
-                            DrawBox(validationCommandData);
-                            EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
-                        }
-                    }
-
-                    value.Item1 = groupScope.IsFolded;
-                }
+                Add(foldoutGroup);
             }
         }
 
@@ -75,11 +68,11 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
         {
             if (_currentItem == null)
             {
-                _currentItem = _dataDictionary.First().Value.Item2.First();
+                _currentItem = _dataDictionary.First().Value.First();
             }
             else
             {
-                var list = _dataDictionary.Values.SelectMany(x => x.Item2).ToList();
+                var list = _dataDictionary.Values.SelectMany(x => x).ToList();
 
                 var index = list.IndexOf(_currentItem);
                 index += direction;
@@ -98,14 +91,14 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
         {
             foreach (var keyValue in _dataDictionary.Values)
             {
-                keyValue.Item2.RemoveAll(x =>
+                keyValue.RemoveAll(data =>
                 {
-                    x.Revalidate();
-                    return x.IsValid;
+                    data.Revalidate();
+                    return data.IsValid;
                 });
             }
 
-            _count = _dataDictionary.Sum(x => x.Value.Item2.Count);
+            _count = _dataDictionary.Sum(x => x.Value.Count);
         }
 
 
@@ -113,7 +106,7 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
         {
             foreach (var list in _dataDictionary.Values)
             {
-                foreach (var data in list.Item2)
+                foreach (var data in list)
                 {
                     data.Revalidate();
                 }
@@ -131,8 +124,8 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
             {
                 return new List<ValidationCommandData>();
             }
-            
-            return _dataDictionary.Values.SelectMany(x => x.Item2).ToList();
+
+            return _dataDictionary.Values.SelectMany(x => x).ToList();
         }
     }
 }

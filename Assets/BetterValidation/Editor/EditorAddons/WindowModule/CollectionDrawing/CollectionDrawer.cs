@@ -1,89 +1,49 @@
-﻿using System.Collections.Generic;
-using Better.Commons.EditorAddons.Enums;
+﻿using System;
+using System.Collections.Generic;
 using Better.Commons.EditorAddons.Utility;
-using Better.Validation.EditorAddons.Utility;
-using UnityEditor;
-using UnityEngine;
+using Better.Commons.Runtime.Interfaces;
+using UnityEngine.UIElements;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
-    public abstract class CollectionDrawer
+    public abstract class CollectionDrawer : VisualElement, ICopyable<CollectionDrawer>
     {
-        private const string ScriptIconName = "cs Script Icon";
         protected ValidationCommandData _currentItem = null;
+        protected event Action<ValidationCommandData> CurrentUpdated;
         public abstract int Count { get; }
-        
+
         public abstract int Order { get; }
 
         public abstract string GetOptionName();
 
         public abstract CollectionDrawer Initialize(List<ValidationCommandData> data);
-
-        public virtual CollectionDrawer CopyFrom(CollectionDrawer collectionDrawer)
+        
+        public void Copy(CollectionDrawer source)
         {
-            _currentItem = collectionDrawer._currentItem;
-            Initialize(collectionDrawer.GetRemaining());
-            return this;
+            UpdateCurrent(source._currentItem);
+            Initialize(source.GetRemaining());
         }
 
-        public abstract void DrawCollection();
-
-        protected virtual void DrawBox(ValidationCommandData data)
+        protected DataBox CreateBox(ValidationCommandData data)
         {
-            var bufferColor = GUI.backgroundColor;
-
-            using (var verticalScore = new EditorGUILayout.VerticalScope())
-            {
-                if (_currentItem == data)
-                {
-                    GUI.backgroundColor = Color.yellow;
-                }
-
-                GUI.Box(verticalScore.rect, GUIContent.none, EditorStyles.helpBox);
-
-                EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
-
-                DrawLabel(data);
-
-                EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
-                var iconType = data.Type.GetIconType();
-                if (data.IsValid)
-                {
-                    GUI.backgroundColor = Color.green;
-                    iconType = IconType.Checkmark;
-                }
-
-                ExtendedGUIUtility.HelpBox(data.Result, iconType, false);
-                EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
-            }
-
-            GUI.backgroundColor = bufferColor;
+            var box = new DataBox(data);
+            box.UpdateStyle(_currentItem);
+            box.Selected += ShowClicked;
+            CurrentUpdated += box.UpdateStyle;
+            return box;
         }
 
-        protected virtual void DrawLabel(ValidationCommandData data)
+        private void ShowClicked(DataBox dataBox)
         {
-            using (var horizontalScore = new EditorGUILayout.HorizontalScope())
-            {
-                var reference = data.Target;
+            var data = dataBox.Data;
+            SelectionUtility.OpenReference(data.Target);
+            UpdateCurrent(data);
+        }
 
-                var csIcon = EditorGUIUtility.IconContent(ScriptIconName);
-                csIcon.text = reference.GetType().Name;
-
-                var icon = EditorGUIUtility.GetIconForObject(reference);
-                if (icon)
-                {
-                    csIcon.image = icon;
-                }
-                
-                EditorGUILayout.LabelField(csIcon);
-                EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
-
-                if (GUILayout.Button("Show"))
-                {
-                    ValidationUtility.OpenReference(reference);
-                    _currentItem = data;
-                }
-            }
+        public void UpdateCurrent(ValidationCommandData data)
+        {
+            _currentItem = data;
+            CurrentUpdated?.Invoke(_currentItem);
         }
 
         public abstract void ClearResolved();

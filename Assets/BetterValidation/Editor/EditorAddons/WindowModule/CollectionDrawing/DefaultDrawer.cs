@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Better.Commons.EditorAddons.Utility;
-using UnityEditor;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
@@ -10,36 +8,40 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
         private List<ValidationCommandData> _dataList;
         
         public override int Order { get; } = 0;
+        public override int Count => _dataList.Count;
+
+        public override CollectionDrawer Initialize(List<ValidationCommandData> data)
+        {
+            _dataList = data;
+            CreateDataBoxes();
+            name = GetOptionName();
+            return this;
+        }
+
+        private void CreateDataBoxes()
+        {
+            Clear();
+            foreach (var commandData in _dataList)
+            {
+                var box = CreateBox(commandData);
+                Add(box);
+            }
+        }
 
         public override string GetOptionName()
         {
             return "Default";
         }
-
-        public override CollectionDrawer Initialize(List<ValidationCommandData> data)
-        {
-            _dataList = data;
-            return this;
-        }
-
-        public override int Count => _dataList.Count;
-
-        public override void DrawCollection()
-        {
-            foreach (var data in _dataList)
-            {
-                DrawBox(data);
-                EditorGUILayout.Space(ExtendedGUIUtility.SpaceHeight);
-            }
-        }
-
+        
         public override void ClearResolved()
         {
-            _dataList.RemoveAll(x =>
+            _dataList.RemoveAll(data =>
             {
-                x.Revalidate();
-                return x.IsValid;
+                data.Revalidate();
+                return data.IsValid;
             });
+            
+            CreateDataBoxes();
         }
 
         public override ValidationCommandData GetNext()

@@ -1,0 +1,87 @@
+﻿using Better.Commons.Runtime.Extensions;
+using UnityEditor;
+using UnityEngine;
+
+namespace Better.Validation.EditorAddons.Handlers
+{
+    public class SceneReferenceHandler : NotNullHandler
+    {
+        public override ValidationValue<string> Validate()
+        {
+            var baseResult = base.Validate();
+            if (!baseResult.State)
+            {
+                return baseResult;
+            }
+
+            var target = Property.serializedObject.targetObject;
+
+            var obj = Property.objectReferenceValue;
+
+            return ValidateNotPrefabContext(obj, target);
+        }
+
+        private ValidationValue<string> ValidateNotPrefabContext(Object obj, Object target)
+        {
+            var isObjectInScene = IsObjectInScene(obj);
+            var isTargetInScene = IsObjectInScene(target);
+
+            if (isTargetInScene && !isObjectInScene)
+            {
+                var str = $"\"{Property.displayName.FormatBoldItalic()}\"";;
+                return GetNotValidCache($"Object in {str} field is not scene object");
+            }
+
+            if (!isTargetInScene)
+            {
+                return ValueTuple(obj, target);
+            }
+
+            return GetClearCache();
+        }
+
+        private bool IsObjectInScene(Object obj)
+        {
+            if (obj is GameObject gameObject)
+            {
+                return gameObject.scene.IsValid();
+            }
+
+            if (obj is Component component)
+            {
+                return component.gameObject.scene.IsValid();
+            }
+
+            return false;
+        }
+
+        private ValidationValue<string> ValueTuple(Object obj, Object target)
+        {
+            var objRoot = GetOutermostPrefabInstanceRoot(obj);
+            var targetRoot = GetOutermostPrefabInstanceRoot(target);
+            var equals = objRoot == targetRoot;
+            if (!equals)
+            {
+                return GetNotValidCache(
+                    $"Object in \"{Property.displayName.FormatBoldItalic()}\" field is not part of \"{target.name.FormatBoldItalic()}\" prefab");
+            }
+
+            return GetClearCache();
+        }
+
+        private static Object GetOutermostPrefabInstanceRoot(Object obj)
+        {
+            var outermostPrefabInstanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(obj);
+            if (outermostPrefabInstanceRoot.IsNullOrDestroyed())
+            {
+                if (obj is GameObject gameObject)
+                    outermostPrefabInstanceRoot = gameObject.transform.root ? gameObject.transform.root.gameObject : gameObject;
+
+                if (obj is Component component)
+                    outermostPrefabInstanceRoot = component.gameObject;
+            }
+
+            return outermostPrefabInstanceRoot;
+        }
+    }
+}

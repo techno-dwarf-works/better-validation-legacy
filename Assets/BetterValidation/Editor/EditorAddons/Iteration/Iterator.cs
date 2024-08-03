@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Better.Commons.Runtime.Extensions;
 using Better.Validation.EditorAddons.ContextResolver;
+using Better.Validation.EditorAddons.Handlers;
 using Better.Validation.EditorAddons.Utility;
-using Better.Validation.EditorAddons.Wrappers;
 using UnityEditor;
 using UnityEngine;
 
@@ -39,7 +39,7 @@ namespace Better.Validation.EditorAddons.Iteration
                 if (!obj)
                 {
                     CacheData.SetTarget(reference);
-                    var missingReference = new ValidationCommandData(CacheData, new MissingComponentWrapper(gameObject));
+                    var missingReference = new ValidationCommandData(CacheData, new MissingComponentHandler(gameObject));
                     missingReference.SetResultCompiler((data, result) => $"Missing Component on GameObject: {_path.Resolve(data.Target)}");
                     missingReference.Revalidate();
                     commandData.Add(missingReference);
