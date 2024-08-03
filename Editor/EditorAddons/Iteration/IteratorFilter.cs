@@ -1,31 +1,27 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using Better.Commons.EditorAddons.Drawers.Base;
-using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Drawers;
+using Better.Commons.EditorAddons.Drawers.Handlers;
 using Better.Commons.EditorAddons.Extensions;
 using Better.Commons.Runtime.Extensions;
-using Better.Validation.EditorAddons.Utility;
-using Better.Validation.EditorAddons.Wrappers;
+using Better.Validation.EditorAddons.Extensions;
+using Better.Validation.EditorAddons.Handlers;
 using Better.Validation.Runtime.Attributes;
 
 namespace Better.Validation.EditorAddons.Iteration
 {
     public static class IteratorFilter
     {
-        private class LocalCache : CacheValue<WrapperCollectionValue<PropertyValidationWrapper>>
-        {
-        }
+        private static readonly TypeHandlerBinder<ValidationHandler> Wrappers = HandlerBinderRegistry.GetMap<ValidationHandler>();
 
-        private static readonly LocalCache CacheField = new LocalCache();
-        private static readonly WrapperCollection<PropertyValidationWrapper> Wrappers = new WrapperCollection<PropertyValidationWrapper>();
-
-        private static readonly MissingReferenceWrapper ReferenceWrapper = new MissingReferenceWrapper();
+        private static readonly MissingReferenceHandler ReferenceHandler = new MissingReferenceHandler();
 
         public static IEnumerable<ValidationCommandData> PropertyIterationWithAttributes(IterationData data)
         {
             var fieldInfo = data.Property.GetFieldInfoAndStaticTypeFromProperty();
             var list = data.Property.GetAttributes<ValidationAttribute>();
-            if (fieldInfo == null || list == null) return null;
+            if (fieldInfo == null || list == null) return Enumerable.Empty<ValidationCommandData>();
 
             var fieldType = fieldInfo.FieldInfo.FieldType;
             if (fieldType.IsArrayOrList())
@@ -36,22 +32,17 @@ namespace Better.Validation.EditorAddons.Iteration
             var dataList = new List<ValidationCommandData>();
             foreach (var validationAttribute in list)
             {
-                ValidateCachedPropertiesUtility.Validate(Wrappers, CacheField, data.Property, fieldType, validationAttribute.GetType(), ValidationAttributeUtility.Instance);
+                var handler = Wrappers.GetHandler(fieldType, validationAttribute.GetType());
 
-                var fieldValue = CacheField.Value;
-                if (fieldValue == null)
-                {
-                    continue;
-                }
+                if (handler is not PropertyValidationHandler propertyHandler) continue;
 
-                var wrapper = fieldValue.Wrapper;
-                wrapper.SetProperty(data.Property, validationAttribute);
+                propertyHandler.Setup(data.Property, fieldInfo.FieldInfo, validationAttribute);
 
-                var result = wrapper.IsSupported() ? wrapper.Validate() : ValidationWrapper.GetClearCache();
+                var result = handler.IsSupported() ? handler.Validate() : ValidationHandler.GetClearValue();
 
-                if (result.IsValid) continue;
+                if (result.State) continue;
 
-                dataList.Add(GenerateData(data, wrapper, result.Value));
+                dataList.Add(GenerateData(data, propertyHandler, result.Result));
             }
 
             return dataList;
@@ -59,24 +50,27 @@ namespace Better.Validation.EditorAddons.Iteration
 
         public static IEnumerable<ValidationCommandData> MissingPropertyIteration(IterationData data)
         {
-            ReferenceWrapper.SetProperty(data.Property, null);
-            if (!ReferenceWrapper.IsSupported()) return null;
-            var result = ReferenceWrapper.Validate();
-            if (result.IsValid) return null;
-            var validationCommandData = new ValidationCommandData(data, ReferenceWrapper);
+            var fieldInfo = data.Property.GetFieldInfoAndStaticTypeFromProperty();
+            if (fieldInfo == null) return Enumerable.Empty<ValidationCommandData>();
+            
+            ReferenceHandler.Setup(data.Property, fieldInfo.FieldInfo, null);
+            if (!ReferenceHandler.IsSupported()) return null;
+            var result = ReferenceHandler.Validate();
+            if (result.State) return null;
+            var validationCommandData = new ValidationCommandData(data, ReferenceHandler);
 
             validationCommandData.SetResultCompiler(ObjectCompiler);
 
-            validationCommandData.SetInitialResult(ObjectCompiler(validationCommandData, result.Value));
+            validationCommandData.SetInitialResult(ObjectCompiler(validationCommandData, result.Result));
             return new[]
             {
                 validationCommandData
             };
         }
 
-        private static ValidationCommandData GenerateData(IterationData data, PropertyValidationWrapper wrapper, string resultValue)
+        private static ValidationCommandData GenerateData(IterationData data, PropertyValidationHandler handler, string resultValue)
         {
-            var copy = new ValidationCommandData(data, wrapper.Copy());
+            var copy = new ValidationCommandData(data, handler.Copy());
             copy.SetResultCompiler(ObjectCompiler);
             copy.SetInitialResult(ObjectCompiler(copy, resultValue));
             return copy;
@@ -89,7 +83,7 @@ namespace Better.Validation.EditorAddons.Iteration
             var target = commandData.Target;
             var resolvedPath = commandData.PathResolver.Resolve(target);
             var typeName = target.GetType().Name;
-            
+
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat("Validation failed with: <b>{0}</b>.", result);
             stringBuilder.AppendLine();

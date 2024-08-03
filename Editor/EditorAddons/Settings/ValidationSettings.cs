@@ -4,11 +4,12 @@ using Better.ProjectSettings.Runtime;
 using Better.Singletons.Runtime.Attributes;
 using Better.Validation.EditorAddons.PreBuildValidation;
 using Better.Validation.Runtime.Attributes;
+using UnityEditor;
 using UnityEngine;
 
 namespace Better.Validation.EditorAddons.Settings
 {
-    [ScriptableCreate(PrefixConstants.BetterPrefix + "/" + nameof(Validation))]
+    [ScriptableCreate(PrefixConstants.BetterPrefix + "/" + nameof(Editor) + "/" + nameof(Validation))]
     public class ValidationSettings : ScriptableSettings<ValidationSettings>
     {
         [SerializeField] private bool _disableBuildValidation;

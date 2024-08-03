@@ -1,34 +1,33 @@
-﻿using Better.Commons.EditorAddons.Drawers.Caching;
-using Better.Validation.Runtime.Attributes;
+﻿using Better.Validation.Runtime.Attributes;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.Wrappers
+namespace Better.Validation.EditorAddons.Handlers
 {
-    public class MissingComponentWrapper : ValidationWrapper
+    public class MissingComponentHandler : ValidationHandler
     {
         private Object _target;
 
-        public MissingComponentWrapper(Object target)
+        public MissingComponentHandler(Object target)
         {
             _target = target;
         }
 
         public override ValidationType Type => ValidationType.Error;
 
-        public override CacheValue<string> Validate()
+        public override ValidationValue<string> Validate()
         {
-            if (!_target) return GetClearCache();
+            if (!_target) return GetClearValue();
             if (_target is GameObject gameObject)
             {
                 var components = gameObject.GetComponents<Component>();
                 for (var index = components.Length - 1; index >= 0; index--)
                 {
                     var obj = components[index];
-                    if (!obj) return GetNotValidCache($"Missing Component on GameObject: {_target.name}");
+                    if (!obj) return GetNotValidValue($"Missing Component on GameObject: {_target.name}");
                 }
             }
 
-            return GetClearCache();
+            return GetClearValue();
         }
 
         public override bool IsSupported()

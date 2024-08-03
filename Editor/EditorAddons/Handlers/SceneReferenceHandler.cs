@@ -1,17 +1,15 @@
-﻿using Better.Commons.EditorAddons.Drawers.Caching;
-using Better.Commons.EditorAddons.Utility;
-using Better.Commons.Runtime.Extensions;
+﻿using Better.Commons.Runtime.Extensions;
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.Wrappers
+namespace Better.Validation.EditorAddons.Handlers
 {
-    public class SceneReferenceWrapper : NotNullWrapper
+    public class SceneReferenceHandler : NotNullHandler
     {
-        public override CacheValue<string> Validate()
+        public override ValidationValue<string> Validate()
         {
             var baseResult = base.Validate();
-            if (!baseResult.IsValid)
+            if (!baseResult.State)
             {
                 return baseResult;
             }
@@ -23,15 +21,15 @@ namespace Better.Validation.EditorAddons.Wrappers
             return ValidateNotPrefabContext(obj, target);
         }
 
-        private CacheValue<string> ValidateNotPrefabContext(Object obj, Object target)
+        private ValidationValue<string> ValidateNotPrefabContext(Object obj, Object target)
         {
             var isObjectInScene = IsObjectInScene(obj);
             var isTargetInScene = IsObjectInScene(target);
 
             if (isTargetInScene && !isObjectInScene)
             {
-                var str = ExtendedGUIUtility.BeautifyFormat(Property.displayName);
-                return GetNotValidCache($"Object in {str} field is not scene object");
+                var str = $"\"{Property.displayName.FormatBoldItalic()}\"";;
+                return GetNotValidValue($"Object in {str} field is not scene object");
             }
 
             if (!isTargetInScene)
@@ -39,7 +37,7 @@ namespace Better.Validation.EditorAddons.Wrappers
                 return ValueTuple(obj, target);
             }
 
-            return GetClearCache();
+            return GetClearValue();
         }
 
         private bool IsObjectInScene(Object obj)
@@ -57,18 +55,18 @@ namespace Better.Validation.EditorAddons.Wrappers
             return false;
         }
 
-        private CacheValue<string> ValueTuple(Object obj, Object target)
+        private ValidationValue<string> ValueTuple(Object obj, Object target)
         {
             var objRoot = GetOutermostPrefabInstanceRoot(obj);
             var targetRoot = GetOutermostPrefabInstanceRoot(target);
             var equals = objRoot == targetRoot;
             if (!equals)
             {
-                return GetNotValidCache(
-                    $"Object in {ExtendedGUIUtility.BeautifyFormat(Property.displayName)} field is not part of {ExtendedGUIUtility.BeautifyFormat(target.name)} prefab");
+                return GetNotValidValue(
+                    $"Object in \"{Property.displayName.FormatBoldItalic()}\" field is not part of \"{target.name.FormatBoldItalic()}\" prefab");
             }
 
-            return GetClearCache();
+            return GetClearValue();
         }
 
         private static Object GetOutermostPrefabInstanceRoot(Object obj)

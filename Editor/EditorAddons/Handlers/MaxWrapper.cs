@@ -1,33 +1,37 @@
 ﻿using System;
-using Better.Commons.EditorAddons.Drawers.Caching;
 using Better.Commons.EditorAddons.Extensions;
-using Better.Commons.EditorAddons.Utility;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
 
-namespace Better.Validation.EditorAddons.Wrappers
+namespace Better.Validation.EditorAddons.Handlers
 {
-    public class MaxWrapper : PropertyValidationWrapper
+    public class MaxWrapper : PropertyValidationHandler
     {
         public override bool IsSupported()
         {
             return Property.propertyType is SerializedPropertyType.Integer or SerializedPropertyType.Float;
         }
 
-        public override CacheValue<string> Validate()
+        public override ValidationValue<string> Validate()
         {
             var maxAttribute = (MaxAttribute)Attribute;
             var maxValue = maxAttribute.Max;
-            var isValid = Property.propertyType switch
+            bool isValid;
+            switch (Property.propertyType)
             {
-                SerializedPropertyType.Float => Property.floatValue <= maxValue,
-                SerializedPropertyType.Integer => Property.intValue <= maxValue,
-                _ => throw new ArgumentOutOfRangeException()
-            };
+                case SerializedPropertyType.Float:
+                    isValid = Property.floatValue <= maxValue;
+                    break;
+                case SerializedPropertyType.Integer:
+                    isValid = Property.intValue <= maxValue;
+                    break;
+                default:
+                    return GetNotValidValue($"Property: {Property.displayName} has invalid type: {Property.propertyType}");
+            }
 
             if (isValid)
             {
-                return GetClearCache();
+                return GetClearValue();
             }
 
             switch (Property.propertyType)
@@ -42,7 +46,7 @@ namespace Better.Validation.EditorAddons.Wrappers
 
             EditorUtility.SetDirty(Property.serializedObject.targetObject);
             Property.serializedObject.ApplyModifiedProperties();
-            return GetClearCache();
+            return GetClearValue();
         }
     }
 }

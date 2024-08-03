@@ -1,67 +1,51 @@
-using System.Reflection;
-using Better.Commons.EditorAddons.Drawers.Attributes;
-using Better.Commons.EditorAddons.Drawers.Base;
-using Better.Commons.EditorAddons.Drawers.Caching;
+using Better.Commons.EditorAddons.Drawers;
+using Better.Commons.EditorAddons.Drawers.Container;
+using Better.Commons.EditorAddons.Extensions;
 using Better.Commons.EditorAddons.Utility;
-using Better.Commons.Runtime.Drawers.Attributes;
+using Better.Commons.Runtime.Extensions;
+using Better.Validation.EditorAddons.Handlers;
 using Better.Validation.EditorAddons.Utility;
-using Better.Validation.EditorAddons.Wrappers;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
-using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Better.Validation.EditorAddons.Drawers
 {
-    [MultiCustomPropertyDrawer(typeof(ValidationAttribute))]
-    public class ValidationDrawer : MultiFieldDrawer<PropertyValidationWrapper>
+    [CustomPropertyDrawer(typeof(ValidationAttribute))]
+    public class ValidationDrawer : BasePropertyDrawer<PropertyValidationHandler, ValidationAttribute>
     {
-        private CacheValue<MutableTuple<string, ValidationType>> _validationResult = new CacheValue<MutableTuple<string, ValidationType>>();
-        
-        public ValidationDrawer(FieldInfo fieldInfo, MultiPropertyAttribute attribute) : base(fieldInfo, attribute)
+        protected override void PopulateContainer(ElementsContainer container)
         {
+            UpdateDrawer(container);
+            container.SerializedPropertyChanged += UpdateDrawer;
         }
-        
-        protected override bool PreDraw(ref Rect position, SerializedProperty property, GUIContent label)
+
+        private void UpdateDrawer(ElementsContainer container)
         {
-            var cache = ValidateCachedProperties(property, ValidationAttributeUtility.Instance);
-            var validationWrapper = cache.Value;
-            var wrapper = validationWrapper.Wrapper;
-            if (!cache.IsValid)
+            var handler = GetHandler(container.SerializedProperty);
+            handler.Setup(container.SerializedProperty, FieldInfo, Attribute);
+
+            if (handler.IsSupported())
             {
-                if (cache.Value == null)
+                var validation = handler.Validate();
+
+                HelpBox helpBox;
+                if (!container.TryGetByTag(container.SerializedProperty, out var element))
                 {
-                    return false;
+                    helpBox = new HelpBox();
+                    element = container.CreateElementFrom(helpBox);
+                    element.AddTag(container.SerializedProperty);
+                }
+                else
+                {
+                    helpBox = element.Q<HelpBox>();
                 }
 
-                wrapper.SetProperty(property, (ValidationAttribute)_attribute);
+                helpBox.text = validation.Result;
+                helpBox.messageType = handler.Type.GetMessageType();
+
+                helpBox.style.SetVisible(!validation.State);
             }
-
-            if (wrapper.IsSupported())
-            {
-                var validation = wrapper.Validate();
-                _validationResult.Set(validation.IsValid, new MutableTuple<string, ValidationType>(validation.Value, wrapper.Type));
-            }
-
-            return true;
-        }
-
-        protected override Rect PreparePropertyRect(Rect original)
-        {
-            return original;
-        }
-
-        protected override void PostDraw(Rect position, SerializedProperty property, GUIContent label)
-        {
-            if (!_validationResult.IsValid)
-            {
-                var (value, type) = _validationResult.Value;
-                ExtendedGUIUtility.HelpBox(value, type.GetIconType());
-            }
-        }
-
-        protected override WrapperCollection<PropertyValidationWrapper> GenerateCollection()
-        {
-            return new WrapperCollection<PropertyValidationWrapper>();
         }
     }
 }

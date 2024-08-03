@@ -1,35 +1,39 @@
 ﻿using System;
-using Better.Commons.EditorAddons.Drawers.Caching;
 using Better.Commons.EditorAddons.Extensions;
-using Better.Commons.EditorAddons.Utility;
 using Better.Validation.Runtime.Attributes;
 using UnityEditor;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.Wrappers
+namespace Better.Validation.EditorAddons.Handlers
 {
-    public class ClampWrapper : PropertyValidationWrapper
+    public class ClampWrapper : PropertyValidationHandler
     {
         public override bool IsSupported()
         {
             return Property.propertyType is SerializedPropertyType.Integer or SerializedPropertyType.Float;
         }
 
-        public override CacheValue<string> Validate()
+        public override ValidationValue<string> Validate()
         {
             var clampAttribute = (ClampAttribute)Attribute;
             var minValue = clampAttribute.Min;
             var maxValue = clampAttribute.Max;
-            var value = Property.propertyType switch
+            float value;
+            switch (Property.propertyType)
             {
-                SerializedPropertyType.Float => Property.floatValue,
-                SerializedPropertyType.Integer => Property.intValue,
-                _ => throw new ArgumentOutOfRangeException()
-            };
+                case SerializedPropertyType.Float:
+                    value = Property.floatValue;
+                    break;
+                case SerializedPropertyType.Integer:
+                    value = Property.intValue;
+                    break;
+                default:
+                    return GetNotValidValue($"Property: {Property.displayName} has invalid type: {Property.propertyType}");
+            }
 
             if (value >= minValue && value <= maxValue)
             {
-                return GetClearCache();
+                return GetClearValue();
             }
 
             value = Mathf.Clamp(value, minValue, maxValue);
@@ -45,7 +49,7 @@ namespace Better.Validation.EditorAddons.Wrappers
 
             EditorUtility.SetDirty(Property.serializedObject.targetObject);
             Property.serializedObject.ApplyModifiedProperties();
-            return GetClearCache();
+            return GetClearValue();
         }
     }
 }

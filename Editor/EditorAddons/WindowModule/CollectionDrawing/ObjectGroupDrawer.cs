@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Better.Validation.EditorAddons.Comparers;
 using Object = UnityEngine.Object;
 
 namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
 {
-    public class ObjectGroupDrawer : GroupDictionaryDrawer<Object, Dictionary<Object, MutableTuple<bool, List<ValidationCommandData>>>>
+    public class ObjectGroupDrawer : GroupDictionaryDrawer<Object, Dictionary<Object, List<ValidationCommandData>>>
     {
         public override int Order { get; } = 2;
 
@@ -12,18 +13,18 @@ namespace Better.Validation.EditorAddons.WindowModule.CollectionDrawing
             return "Object Group";
         }
 
-        protected override Dictionary<Object, MutableTuple<bool, List<ValidationCommandData>>> OnInitialize(List<ValidationCommandData> data)
+        protected override Dictionary<Object, List<ValidationCommandData>> OnInitialize(List<ValidationCommandData> data)
         {
-            var dataDictionary = new Dictionary<Object, MutableTuple<bool, List<ValidationCommandData>>>(GameObjectGroupingComparer.Instance);
+            var dataDictionary = new Dictionary<Object, List<ValidationCommandData>>(GameObjectGroupingComparer.Instance);
             foreach (var commandData in data)
             {
                 if (!dataDictionary.TryGetValue(commandData.Target, out var list))
                 {
-                    list = new MutableTuple<bool, List<ValidationCommandData>>(true, new List<ValidationCommandData>());
+                    list = new List<ValidationCommandData>();
                     dataDictionary.Add(commandData.Target, list);
                 }
 
-                list.Item2.Add(commandData);
+                list.Add(commandData);
             }
 
             return dataDictionary;

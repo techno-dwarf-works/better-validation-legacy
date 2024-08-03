@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using Better.Commons.EditorAddons.Utility;
+using Better.Commons.Runtime.Extensions;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Better.Validation.EditorAddons.WindowModule
 {
     public class ValidateTab : BaseValidationTab
     {
-        private GUIContent _bottomText;
+        private const string BottomText = "Validation commands will go through Unity SerializedProperties and run validation attributes";
         private GUIStyle _style;
         private const string Name = "Validate";
 
@@ -20,43 +23,34 @@ namespace Better.Validation.EditorAddons.WindowModule
         public override void Initialize()
         {
             base.Initialize();
-            _bottomText = new GUIContent("Validation commands will go through Unity SerializedProperties and run validation attributes");
-            _style = new GUIStyle(EditorStyles.label);
-            _style.wordWrap = true;
+            CreateVisualElements();
+            style.Width(new StyleLength(new Length(100, LengthUnit.Percent)))
+                .Height(new StyleLength(new Length(100, LengthUnit.Percent)));
         }
 
-        public override List<ValidationCommandData> DrawUpdate()
+        private void CreateVisualElements()
         {
-            return DrawButtons();
-        }
-
-        private List<ValidationCommandData> DrawButtons()
-        {
-            using (new EditorGUILayout.VerticalScope())
-            {
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    if (GUILayout.Button("In Current Scene"))
-                    {
-                        return _commands.ValidateAttributesInCurrentScene();
-                    }
-
-                    if (GUILayout.Button("In All Scenes"))
-                    {
-                        return _commands.ValidateAttributesInAllScenes();
-                    }
-
-                    if (GUILayout.Button("In Project"))
-                    {
-                        return _commands.ValidateAttributesInProject();
-                    }
-                }
-
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.LabelField(_bottomText, _style);
-            }
-
-            return null;
+            var horizontalGroup = VisualElementUtility.CreateHorizontalGroup();
+            Add(horizontalGroup);
+            
+            var currentSceneButton = new Button(() => SelectCommands(_commands.ValidateAttributesInCurrentScene())) { text = "In Current Scene" };
+            currentSceneButton.style.FlexGrow(StyleDefinition.OneStyleFloat);
+            horizontalGroup.Add(currentSceneButton);
+            
+            var allScenesButton = new Button(() => SelectCommands(_commands.ValidateAttributesInAllScenes())) { text = "In All Scenes" };
+            allScenesButton.style.FlexGrow(StyleDefinition.OneStyleFloat);
+            horizontalGroup.Add(allScenesButton);
+            
+            var inProjectButton = new Button(() => SelectCommands(_commands.ValidateAttributesInProject())) { text = "In Project" };
+            inProjectButton.style.FlexGrow(StyleDefinition.OneStyleFloat);
+            horizontalGroup.Add(inProjectButton);
+            
+            var label = new Label(BottomText);
+            label.style
+                .WhiteSpace(new StyleEnum<WhiteSpace>(WhiteSpace.Normal))
+                .MarginTop(new StyleLength(StyleKeyword.Auto))
+                .Padding(new StyleLength(new Length(5, LengthUnit.Pixel)));
+            Add(label);
         }
     }
 }

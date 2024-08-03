@@ -2,7 +2,7 @@
 using Better.Commons.Runtime.Comparers;
 using UnityEngine;
 
-namespace Better.Validation.EditorAddons.WindowModule
+namespace Better.Validation.EditorAddons.Comparers
 {
     public class GameObjectGroupingComparer : BaseComparer<GameObjectGroupingComparer, Object>, IEqualityComparer<Object>
     {
