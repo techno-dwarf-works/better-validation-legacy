@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using Better.Commons.EditorAddons.Utility;
+using Better.Commons.Runtime.Extensions;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Better.Validation.EditorAddons.WindowModule
 {
     public class MissingReferenceTab : BaseValidationTab
     {
-        private GUIContent _bottomText;
+        private const string BottomText = "Those commands looking for missing references in Unity SerializedProperties";
         private GUIStyle _style;
         private const string Name = "Find Missing References";
 
@@ -20,43 +23,34 @@ namespace Better.Validation.EditorAddons.WindowModule
         public override void Initialize()
         {
             base.Initialize();
-            _bottomText = new GUIContent("Those commands looking for missing references in Unity SerializedProperties");
-            _style = new GUIStyle(EditorStyles.label);
-            _style.wordWrap = true;
+            CreateVisualElements();
+            style.Width(new StyleLength(new Length(100, LengthUnit.Percent)))
+                .Height(new StyleLength(new Length(100, LengthUnit.Percent)));
         }
 
-        public override List<ValidationCommandData> DrawUpdate()
+        private void CreateVisualElements()
         {
-            return DrawButtons();
-        }
+            var horizontalGroup = VisualElementUtility.CreateHorizontalGroup();
+            Add(horizontalGroup);
 
-        private List<ValidationCommandData> DrawButtons()
-        {
-            using (new EditorGUILayout.VerticalScope())
-            {
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    if (GUILayout.Button("In Current Scene"))
-                    {
-                        return _commands.FindMissingReferencesInCurrentScene();
-                    }
+            var currentSceneButton = new Button(() => SelectCommands(_commands.FindMissingReferencesInCurrentScene())) { text = "In Current Scene" };
+            currentSceneButton.style.FlexGrow(StyleDefinition.OneStyleFloat);
+            horizontalGroup.Add(currentSceneButton);
 
-                    if (GUILayout.Button("In All Scenes"))
-                    {
-                        return _commands.FindMissingInAllScenes();
-                    }
+            var allScenesButton = new Button(() => SelectCommands(_commands.FindMissingInAllScenes())) { text = "In All Scenes" };
+            allScenesButton.style.FlexGrow(StyleDefinition.OneStyleFloat);
+            horizontalGroup.Add(allScenesButton);
 
-                    if (GUILayout.Button("In Project"))
-                    {
-                        return _commands.FindMissingReferencesInProject();
-                    }
-                }
-                
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.LabelField(_bottomText, _style);
-            }
+            var inProjectButton = new Button(() => SelectCommands(_commands.FindMissingReferencesInProject())) { text = "In Project" };
+            inProjectButton.style.FlexGrow(StyleDefinition.OneStyleFloat);
+            horizontalGroup.Add(inProjectButton);
 
-            return null;
+            var label = new Label(BottomText);
+            label.style
+                .WhiteSpace(new StyleEnum<WhiteSpace>(WhiteSpace.Normal))
+                .MarginTop(new StyleLength(StyleKeyword.Auto))
+                .Padding(new StyleLength(new Length(5, LengthUnit.Pixel)));
+            Add(label);
         }
     }
 }

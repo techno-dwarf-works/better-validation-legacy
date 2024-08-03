@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 namespace Better.Validation.EditorAddons.WindowModule
 {
-    public abstract class BaseValidationTab : IValidationTab
+    public abstract class BaseValidationTab : VisualElement
     {
         protected ValidatorCommands _commands;
+
+        public event Action<List<ValidationCommandData>> CommandSelected; 
+        
         public abstract int Order { get; }
         public abstract string GetTabName();
 
@@ -13,6 +18,9 @@ namespace Better.Validation.EditorAddons.WindowModule
             _commands = new ValidatorCommands();
         }
 
-        public abstract List<ValidationCommandData> DrawUpdate();
+        protected void SelectCommands(List<ValidationCommandData> obj)
+        {
+            CommandSelected?.Invoke(obj);
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Better.Commons.Runtime.Extensions;
 using UnityEditor;
@@ -9,7 +10,7 @@ namespace Better.Validation.EditorAddons.WindowModule
     {
         private const string WindowIcon = "d_console.erroricon.inactive.sml";
 
-        private IWindowPage _currentPage;
+        private ValidationWindowPage _currentPage;
 
         public static void OpenWindow(List<ValidationCommandData> dataList)
         {
@@ -18,7 +19,6 @@ namespace Better.Validation.EditorAddons.WindowModule
             content.text = nameof(Validation).PrettyCamelCase();
             window.titleContent = content;
             window.Show();
-            window.Initialize();
             window.Display(dataList);
 
             window.minSize = new Vector2(200, 400);
@@ -26,21 +26,9 @@ namespace Better.Validation.EditorAddons.WindowModule
 
         private void Display(List<ValidationCommandData> dataList)
         {
-            var page = CreateInitialized<ResultPage>();
+            var page = new DataDisplayPage();
+            OpenPage(page);
             page.SetData(dataList);
-            _currentPage = page;
-        }
-
-        private T CreateInitialized<T>() where T : class, IWindowPage, new()
-        {
-            var page = new T();
-            page.Initialize();
-            return page;
-        }
-
-        private void Initialize()
-        {
-            _currentPage = CreateInitialized<ButtonPage>();
         }
 
         public static void OpenWindow()
@@ -50,7 +38,6 @@ namespace Better.Validation.EditorAddons.WindowModule
             content.text = nameof(Validation).PrettyCamelCase();
             window.titleContent = content;
             window.Show();
-            window.Initialize();
             window.minSize = new Vector2(200, 400);
         }
 
@@ -59,16 +46,24 @@ namespace Better.Validation.EditorAddons.WindowModule
             _currentPage?.Deconstruct();
         }
 
-        private void OnGUI()
+        private void CreateGUI()
         {
-            if (_currentPage == null) return;
-            var page = _currentPage.DrawUpdate();
-            if (page != null)
+            OpenPage(new ValidationTabsPage());
+        }
+
+        private void OpenPage(ValidationWindowPage page)
+        {
+            if (_currentPage != null)
             {
                 _currentPage.Deconstruct();
-                _currentPage = page;
-                _currentPage.Initialize();
+                _currentPage.PageOpenRequest -= OpenPage;
+                _currentPage.RemoveFromHierarchy();
             }
+            
+            _currentPage = page;
+            _currentPage.Initialize();
+            _currentPage.PageOpenRequest += OpenPage;
+            rootVisualElement.Add(_currentPage);
         }
     }
 }

@@ -23,5 +23,9 @@ namespace Better.Validation.Runtime.Attributes
         {
             RequiredType = type;
         }
+
+        public FindAttribute() :this(null)
+        {
+        }
     }
 }
