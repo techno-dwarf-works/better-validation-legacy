@@ -1,4 +1,7 @@
-# Better Validation
+# [Deprecated] Better Validation
+
+> [!CAUTION]
+> Package deprecated and replaced with - [Better Validation](https://github.com/techno-dwarf-works/better-validation)
 
 [![openupm](https://img.shields.io/npm/v/com.uurha.bettervalidation?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.uurha.bettervalidation/)
 
