@@ -1,7 +1,7 @@
 {
   "name": "com.uurha.bettervalidation",
   "displayName": "[Deprecated] Better Validation",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "unity": "2021.3",
   "description": " ",
   "dependencies": {
@@ -13,10 +13,10 @@
     "name": "Better Plugins",
     "url": "https://github.com/techno-dwarf-works"
   },
-  "changelogUrl": "https://github.com/techno-dwarf-works/better-validation",
-  "documentationUrl": "https://github.com/techno-dwarf-works/better-validation/tree/main#readme",
+  "changelogUrl": "https://github.com/techno-dwarf-works/better-validation-legacy",
+  "documentationUrl": "https://github.com/techno-dwarf-works/better-validation-legacy/tree/main#readme",
   "license": "MIT",
-  "licensesUrl":"https://github.com/techno-dwarf-works/better-validation/blob/main/LICENSE",
+  "licensesUrl":"https://github.com/techno-dwarf-works/better-validation-legacy/blob/main/LICENSE",
   "keywords": [
     "Custom Editor",
     "Attributes",
